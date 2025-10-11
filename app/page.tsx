@@ -958,21 +958,35 @@ const languages = {
             songs: [
               {
                 id: "alphabet-francais",
-                title: "L'Alphabet Français",
+                title: "ABC",
                 number: 1,
                 playCount: 10,
                 completed: true,
-                youtubeId: "",
+                youtubeId: "IM2gDcfzJgQ",
               },
-              { id: "accent-marks", title: "Les Accents", number: 2, playCount: 6, completed: false, youtubeId: "" },
-              { id: "pronunciation", title: "Prononciation", number: 3, playCount: 4, completed: false, youtubeId: "" },
+              {
+                id: "accent-marks",
+                title: "Aujourd'hui, on va chanter",
+                number: 2,
+                playCount: 6,
+                completed: false,
+                youtubeId: "a0Cu38RcArs",
+              },
+              {
+                id: "pronunciation",
+                title: "A, E, I, O, U, chantez",
+                number: 3,
+                playCount: 4,
+                completed: false,
+                youtubeId: "HZ2ziOALuvs",
+              },
               {
                 id: "silent-letters",
-                title: "Lettres Muettes",
+                title: "Allons toucher les parties du corps",
                 number: 4,
                 playCount: 2,
                 completed: false,
-                youtubeId: "",
+                youtubeId: "HIdoC0LrhXE",
               },
             ],
           },
@@ -985,29 +999,36 @@ const languages = {
             songs: [
               {
                 id: "bonjour-bonsoir",
-                title: "Bonjour, Bonsoir",
+                title: "Chemise, pantalon",
                 number: 5,
                 playCount: 8,
                 completed: false,
-                youtubeId: "",
+                youtubeId: "rHd26gUQU9g",
               },
               {
                 id: "sil-vous-plait",
-                title: "S'il Vous Plaît",
+                title: "Famille",
                 number: 6,
                 playCount: 3,
                 completed: false,
-                youtubeId: "",
+                youtubeId: "kZkiuHjo2oM",
               },
               {
                 id: "merci-beaucoup",
-                title: "Merci Beaucoup",
+                title: "Que veux tu faire",
                 number: 7,
                 playCount: 0,
                 completed: false,
-                youtubeId: "",
+                youtubeId: "7vhD4NABUYI",
               },
-              { id: "excusez-moi", title: "Excusez-moi", number: 8, playCount: 0, completed: false, youtubeId: "" },
+              {
+                id: "excusez-moi",
+                title: "A Antilope, A Antilope",
+                number: 8,
+                playCount: 0,
+                completed: false,
+                youtubeId: "pQS_Reh0ljU",
+              },
             ],
           },
           {
@@ -1017,17 +1038,38 @@ const languages = {
             color: latinoColors.aqua,
             badgeUnlocked: false,
             songs: [
-              { id: "ma-famille", title: "Ma Famille", number: 9, playCount: 5, completed: false, youtubeId: "" },
-              { id: "ma-maison", title: "Ma Maison", number: 10, playCount: 2, completed: false, youtubeId: "" },
+              {
+                id: "ma-famille",
+                title: "J'ai un chien et un bon chat",
+                number: 9,
+                playCount: 5,
+                completed: false,
+                youtubeId: "A2swhU4MMwE",
+              },
+              {
+                id: "ma-maison",
+                title: "Dans l'eau, dans le ciel, dans la forêt",
+                number: 10,
+                playCount: 2,
+                completed: false,
+                youtubeId: "1mYFPjc7dVE",
+              },
               {
                 id: "les-pieces",
-                title: "Les Pièces de la Maison",
+                title: "Dans ma maison, dans ma maison",
                 number: 11,
                 playCount: 0,
                 completed: false,
-                youtubeId: "",
+                youtubeId: "k8fiW2bD4nQ",
               },
-              { id: "meubles", title: "Les Meubles", number: 12, playCount: 0, completed: false, youtubeId: "" },
+              {
+                id: "meubles",
+                title: "Où sont les toilettes",
+                number: 12,
+                playCount: 0,
+                completed: false,
+                youtubeId: "rFth-NzWjVg",
+              },
             ],
           },
           {
@@ -1037,30 +1079,37 @@ const languages = {
             color: latinoColors.mint,
             badgeUnlocked: false,
             songs: [
-              { id: "les-couleurs", title: "Les Couleurs", number: 13, playCount: 0, completed: false, youtubeId: "" },
+              {
+                id: "les-couleurs",
+                title: "Parfois je me perds, je ne sais où aller",
+                number: 13,
+                playCount: 0,
+                completed: false,
+                youtubeId: "19gAH2n7G6A",
+              },
               {
                 id: "nombres-un-dix",
-                title: "Les Nombres 1-10",
+                title: "Un, deux, trois, quatre, cinq",
                 number: 14,
                 playCount: 0,
                 completed: false,
-                youtubeId: "",
+                youtubeId: "oIw-cMALkOI",
               },
               {
                 id: "nombres-onze-vingt",
-                title: "Les Nombres 11-20",
+                title: "Dix, vingt, trente, quarante, cinquante",
                 number: 15,
                 playCount: 0,
                 completed: false,
-                youtubeId: "",
+                youtubeId: "ofIIBPgZG2U",
               },
               {
                 id: "nombres-grands",
-                title: "Les Grands Nombres",
+                title: "Les jours de la semaine",
                 number: 16,
                 playCount: 0,
                 completed: false,
-                youtubeId: "",
+                youtubeId: "VVA7BuGwCns",
               },
             ],
           },
@@ -1123,26 +1172,6 @@ const languages = {
                 youtubeId: "",
               },
               { id: "emotions", title: "Les Émotions", number: 24, playCount: 0, completed: false, youtubeId: "" },
-            ],
-          },
-          {
-            id: "food-meals",
-            title: "Food & Meals",
-            icon: "🍽️",
-            color: latinoColors.yellow,
-            badgeUnlocked: false,
-            songs: [
-              {
-                id: "fruits-legumes",
-                title: "Les Fruits et Légumes",
-                number: 25,
-                playCount: 0,
-                completed: false,
-                youtubeId: "",
-              },
-              { id: "repas", title: "Les Repas", number: 26, playCount: 0, completed: false, youtubeId: "" },
-              { id: "boissons", title: "Les Boissons", number: 27, playCount: 0, completed: false, youtubeId: "" },
-              { id: "restaurant", title: "Au Restaurant", number: 28, playCount: 0, completed: false, youtubeId: "" },
             ],
           },
         ],
@@ -1673,10 +1702,10 @@ export default function SingNSpeak() {
           {/* Header */}
           <div className="text-white p-4">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-32 h-32 bg-white rounded-full p-3 flex-shrink-0">
+              <div className="w-32 h-32 bg-white rounded-full p-3 flex-shrink-0 border-2 border-white">
                 <Image
-                  src="/images/luna-dog.png"
-                  alt="Luna the dog"
+                  src="/images/singnspeak-logo.png"
+                  alt="SingNSpeak logo"
                   width={104}
                   height={104}
                   className="w-full h-full object-contain"
@@ -1721,12 +1750,12 @@ export default function SingNSpeak() {
           <div className="px-4 space-y-4">
             <h2 className="text-xl font-bold text-white mb-4">Luna's Coin Collection</h2>
 
-            {/* 2. Replace rectangular coin display with circular coins */}
+            {/* Replace rectangular coin display with circular coins */}
             {lunasPurse.filter((item) => item.type === "coin").length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-6xl mb-4">🪙</div>
                 <p className="text-gray-400">No coins earned yet!</p>
-                {/* 3. Update the "Available to Earn" section description */}
+                {/* Update the "Available to Earn" section description */}
                 <p className="text-gray-500 text-sm mt-2">Listen to songs 5 times each to earn coins</p>
               </div>
             ) : (
@@ -1771,7 +1800,7 @@ export default function SingNSpeak() {
                                 ? "hover:scale-110 border-2 border-yellow-400 shadow-lg shadow-yellow-400/30"
                                 : "opacity-50"
                             }`}
-                            // 4. Update the coin earning logic in the section header click handler
+                            // Update the coin earning logic in the section header click handler
                             onClick={() => {
                               if (isSectionBadgeUnlocked(section)) {
                                 // Auto-earn coin when clicking on unlocked section
@@ -1799,7 +1828,7 @@ export default function SingNSpeak() {
                           </div>
                           <div className="flex-1">
                             <h4 className="font-medium text-white text-sm">{section.title}</h4>
-                            {/* 3. Update the "Available to Earn" section description */}
+                            {/* Update the "Available to Earn" section description */}
                             <p className="text-xs text-gray-400">
                               {isUnlocked ? "Ready to claim!" : `Listen to songs 5 times each to unlock`}
                             </p>
@@ -1851,10 +1880,10 @@ export default function SingNSpeak() {
           {/* Header with Large Luna Dog */}
           <div className="text-white p-4">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-32 h-32 bg-white rounded-full p-3 flex-shrink-0">
+              <div className="w-32 h-32 bg-white rounded-full p-3 flex-shrink-0 border-2 border-white">
                 <Image
-                  src="/images/luna-dog.png"
-                  alt="Luna the dog"
+                  src="/images/singnspeak-logo.png"
+                  alt="SingNSpeak logo"
                   width={104}
                   height={104}
                   className="w-full h-full object-contain"
@@ -1916,31 +1945,42 @@ export default function SingNSpeak() {
                     <p className="text-gray-400 text-center py-8">No songs found for "{searchQuery}"</p>
                   ) : (
                     <div className="space-y-1">
-                      {filteredSongs.map((song) => (
-                        <div
-                          key={`${song.categoryId}-${song.sectionId}-${song.id}`}
-                          className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 cursor-pointer transition-all group"
-                          onClick={() => handlePlaySong(song.id, song.categoryId, song.sectionId)}
-                        >
-                          <div className="w-8 h-8 flex items-center justify-center text-gray-400 group-hover:text-purple-400">
-                            <span className="text-sm font-medium group-hover:hidden">{song.number}</span>
-                            <Play className="h-4 w-4 hidden group-hover:block" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-white truncate">{song.title}</h4>
-                            <p className="text-sm text-gray-400 truncate">
-                              {song.section} • {song.category}
-                            </p>
-                          </div>
-                          {/* Updated play count display */}
-                          <div className="flex items-center gap-2 text-sm text-gray-400">
-                            <div className="flex items-center gap-1">
-                              <Play className="h-3 w-3" />
-                              <span className="font-medium">{song.playCount}</span>
+                      {filteredSongs.map((song) => {
+                        const isClickable = song.youtubeId && song.youtubeId !== ""
+                        return (
+                          <div
+                            key={`${song.categoryId}-${song.sectionId}-${song.id}`}
+                            className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
+                              isClickable ? "hover:bg-gray-800 cursor-pointer group" : "opacity-50 cursor-not-allowed"
+                            }`}
+                            onClick={() => isClickable && handlePlaySong(song.id, song.categoryId, song.sectionId)}
+                          >
+                            <div
+                              className={`w-8 h-8 flex items-center justify-center ${
+                                isClickable ? "text-gray-400 group-hover:text-purple-400" : "text-gray-600"
+                              }`}
+                            >
+                              <span className={`text-sm font-medium ${isClickable ? "group-hover:hidden" : ""}`}>
+                                {song.number}
+                              </span>
+                              {isClickable && <Play className="h-4 w-4 hidden group-hover:block" />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium text-white truncate">{song.title}</h4>
+                              <p className="text-sm text-gray-400 truncate">
+                                {song.section} • {song.category}
+                              </p>
+                            </div>
+                            {/* Updated play count display */}
+                            <div className="flex items-center gap-2 text-sm text-gray-400">
+                              <div className="flex items-center gap-1">
+                                <Play className="h-3 w-3" />
+                                <span className="font-medium">{song.playCount}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   )}
                 </div>
@@ -1989,7 +2029,7 @@ export default function SingNSpeak() {
                                     ? "hover:scale-110 border-2 border-yellow-400 shadow-lg shadow-yellow-400/30"
                                     : "opacity-30"
                                 }`}
-                                // 4. Update the coin earning logic in the section header click handler
+                                // Update the coin earning logic in the section header click handler
                                 onClick={() => {
                                   if (isSectionBadgeUnlocked(section)) {
                                     // Auto-earn coin when clicking on unlocked section
@@ -2041,36 +2081,49 @@ export default function SingNSpeak() {
 
                         {/* Song List */}
                         <div className="space-y-1 ml-4">
-                          {section.songs.map((song) => (
-                            <div
-                              key={song.id}
-                              className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 cursor-pointer transition-all group"
-                              onClick={() => handlePlaySong(song.id, category.id, section.id)}
-                            >
-                              <div className="w-8 h-8 flex items-center justify-center text-gray-400 group-hover:text-purple-400">
-                                <span className="text-sm font-medium group-hover:hidden">{song.number}</span>
-                                <Play className="h-4 w-4 hidden group-hover:block" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h4 className="font-medium text-white truncate">{song.title}</h4>
-                                <p className="text-sm text-gray-400 truncate">{section.title}</p>
-                              </div>
-                              {/* Updated play count display */}
-                              <div className="flex items-center gap-2 text-sm text-gray-400">
-                                <div className="flex items-center gap-1">
-                                  <Play className="h-3 w-3" />
-                                  <span className="font-medium">{song.playCount}</span>
+                          {section.songs.map((song) => {
+                            const isClickable = song.youtubeId && song.youtubeId !== ""
+                            return (
+                              <div
+                                key={song.id}
+                                className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
+                                  isClickable
+                                    ? "hover:bg-gray-800 cursor-pointer group"
+                                    : "opacity-50 cursor-not-allowed"
+                                }`}
+                                onClick={() => isClickable && handlePlaySong(song.id, category.id, section.id)}
+                              >
+                                <div
+                                  className={`w-8 h-8 flex items-center justify-center ${
+                                    isClickable ? "text-gray-400 group-hover:text-purple-400" : "text-gray-600"
+                                  }`}
+                                >
+                                  <span className={`text-sm font-medium ${isClickable ? "group-hover:hidden" : ""}`}>
+                                    {song.number}
+                                  </span>
+                                  {isClickable && <Play className="h-4 w-4 hidden group-hover:block" />}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-medium text-white truncate">{song.title}</h4>
+                                  <p className="text-sm text-gray-400 truncate">{section.title}</p>
+                                </div>
+                                {/* Updated play count display */}
+                                <div className="flex items-center gap-2 text-sm text-gray-400">
+                                  <div className="flex items-center gap-1">
+                                    <Play className="h-3 w-3" />
+                                    <span className="font-medium">{song.playCount}</span>
+                                  </div>
+                                </div>
+                                <div className="w-6 h-6 flex items-center justify-center">
+                                  {song.completed ? (
+                                    <Star className="h-4 w-4 text-green-400 fill-current" />
+                                  ) : (
+                                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+                                  )}
                                 </div>
                               </div>
-                              <div className="w-6 h-6 flex items-center justify-center">
-                                {song.completed ? (
-                                  <Star className="h-4 w-4 text-green-400 fill-current" />
-                                ) : (
-                                  <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                                )}
-                              </div>
-                            </div>
-                          ))}
+                            )
+                          })}
                         </div>
                       </div>
                     ))}
