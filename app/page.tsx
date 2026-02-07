@@ -1345,7 +1345,7 @@ const languages = {
   },
 }
 
-export default function SingNSpeak() {
+export default function HablaBeat() {
   const [currentView, setCurrentView] = useState<"songs" | "player" | "coins" | "ddr">("songs")
   const [selectedLanguage, setSelectedLanguage] = useState("spanish")
   const [curriculumData, setCurriculumData] = useState(languages[selectedLanguage].curriculum)
@@ -1648,7 +1648,7 @@ export default function SingNSpeak() {
               <ChevronDown className="h-6 w-6" />
             </Button>
             <div className="text-center">
-              <p className="text-sm text-gray-300">Playing from SingNSpeak</p>
+              <p className="text-sm text-gray-300">Playing from HablaBeat</p>
             </div>
             <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
               <MoreHorizontal className="h-6 w-6" />
@@ -1745,15 +1745,15 @@ export default function SingNSpeak() {
             <div className="flex items-center gap-4 mb-4">
               <div className="w-32 h-32 bg-white rounded-full p-3 flex-shrink-0 border-2 border-white">
                 <Image
-                  src="/images/singnspeak-logo.png"
-                  alt="SingNSpeak logo"
+                  src="/images/hablabeat-logo.png"
+                  alt="HablaBeat logo"
                   width={104}
                   height={104}
                   className="w-full h-full object-contain"
                 />
               </div>
               <div className="flex-1 text-left">
-                <h1 className="text-3xl font-bold mb-1 mt-3">SingNSpeak</h1>
+                <h1 className="text-3xl font-bold mb-1 mt-3">HablaBeat</h1>
                 <p className="text-purple-100 text-lg">Coin Collection</p>
                 <div className="flex items-center gap-2 mt-2">
                   <Coins className="h-4 w-4 text-purple-300" />
@@ -1923,15 +1923,15 @@ export default function SingNSpeak() {
             <div className="flex items-center gap-4 mb-4">
               <div className="w-32 h-32 bg-white rounded-full p-3 flex-shrink-0 border-2 border-white">
                 <Image
-                  src="/images/singnspeak-logo.png"
-                  alt="SingNSpeak logo"
+                  src="/images/hablabeat-logo.png"
+                  alt="HablaBeat logo"
                   width={104}
                   height={104}
                   className="w-full h-full object-contain"
                 />
               </div>
               <div className="flex-1 text-left">
-                <h1 className="text-3xl font-bold mb-1 mt-3">SingNSpeak</h1>
+                <h1 className="text-3xl font-bold mb-1 mt-3">HablaBeat</h1>
                 <p className="text-purple-100 text-lg">Learn languages through song with Luna</p>
                 <div className="flex items-center gap-2 mt-2">
                   <Play className="h-4 w-4 text-purple-300" />

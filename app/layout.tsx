@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "SingNSpeak",
+  title: "HablaBeat",
   description: "Learn languages through song",
     generator: 'v0.app'
 }
