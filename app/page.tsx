@@ -3,6 +3,9 @@
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import dynamic from "next/dynamic"
+
+const DDRGame = dynamic(() => import("@/components/ddr-game"), { ssr: false })
 import { Input } from "@/components/ui/input"
 import {
   Play,
@@ -1343,7 +1346,7 @@ const languages = {
 }
 
 export default function SingNSpeak() {
-  const [currentView, setCurrentView] = useState("songs")
+  const [currentView, setCurrentView] = useState<"songs" | "player" | "coins" | "ddr">("songs")
   const [selectedLanguage, setSelectedLanguage] = useState("spanish")
   const [curriculumData, setCurriculumData] = useState(languages[selectedLanguage].curriculum)
   const [totalPlayCount, setTotalPlayCount] = useState(35)
@@ -1419,12 +1422,31 @@ export default function SingNSpeak() {
         sectionTitle: section?.title,
         sectionColor: section?.color,
         sectionIcon: section?.icon,
-        categoryId: categoryId, // Add categoryId to currentSong
-        sectionId: sectionId, // Add sectionId to currentSong
+        categoryId: categoryId,
+        sectionId: sectionId,
       })
       setCurrentSongIndex(songIndex)
       setCurrentView("player")
       setIsPlaying(true)
+    }
+  }
+
+  const handlePlayDDR = (songId, categoryId, sectionId) => {
+    const category = curriculumData.find((c) => c.id === categoryId)
+    const section = category?.sections.find((s) => s.id === sectionId)
+    const song = section?.songs.find((s) => s.id === songId)
+
+    if (song) {
+      setCurrentSong({
+        ...song,
+        categoryTitle: category?.title,
+        sectionTitle: section?.title,
+        sectionColor: section?.color,
+        sectionIcon: section?.icon,
+        categoryId: categoryId,
+        sectionId: sectionId,
+      })
+      setCurrentView("ddr")
     }
   }
 
@@ -1600,6 +1622,17 @@ export default function SingNSpeak() {
     )
   }
 
+  // DDR Game View
+  if (currentView === "ddr" && currentSong && selectedLanguage === "spanish") {
+    return (
+      <DDRGame
+        songNumber={currentSong.number}
+        songTitle={currentSong.title}
+        onBack={() => setCurrentView("songs")}
+      />
+    )
+  }
+
   if (currentView === "player" && currentSong) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
@@ -1659,10 +1692,18 @@ export default function SingNSpeak() {
 
           {/* Controls */}
           <div className="px-6 mb-8">
-            <div className="flex items-center justify-center gap-16">
+            <div className="flex items-center justify-center gap-6">
               <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                 <Shuffle className="h-6 w-6" />
               </Button>
+              {selectedLanguage === "spanish" && (
+                <button
+                  onClick={() => setCurrentView("ddr")}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-pink-600 hover:bg-pink-500 rounded-full font-bold text-sm transition-colors"
+                >
+                  🎮 Play DDR
+                </button>
+              )}
               <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
                 <Repeat className="h-6 w-6" />
               </Button>
@@ -1950,33 +1991,40 @@ export default function SingNSpeak() {
                         return (
                           <div
                             key={`${song.categoryId}-${song.sectionId}-${song.id}`}
-                            className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
-                              isClickable ? "hover:bg-gray-800 cursor-pointer group" : "opacity-50 cursor-not-allowed"
-                            }`}
-                            onClick={() => isClickable && handlePlaySong(song.id, song.categoryId, song.sectionId)}
+                            className="p-3 rounded-lg transition-all hover:bg-gray-800"
                           >
-                            <div
-                              className={`w-8 h-8 flex items-center justify-center ${
-                                isClickable ? "text-gray-400 group-hover:text-purple-400" : "text-gray-600"
-                              }`}
-                            >
-                              <span className={`text-sm font-medium ${isClickable ? "group-hover:hidden" : ""}`}>
-                                {song.number}
-                              </span>
-                              {isClickable && <Play className="h-4 w-4 hidden group-hover:block" />}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-white truncate">{song.title}</h4>
-                              <p className="text-sm text-gray-400 truncate">
-                                {song.section} • {song.category}
-                              </p>
-                            </div>
-                            {/* Updated play count display */}
-                            <div className="flex items-center gap-2 text-sm text-gray-400">
-                              <div className="flex items-center gap-1">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 flex items-center justify-center text-gray-400">
+                                <span className="text-sm font-medium">{song.number}</span>
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-white truncate">{song.title}</h4>
+                                <p className="text-sm text-gray-400 truncate">
+                                  {song.section} • {song.category}
+                                </p>
+                              </div>
+                              <div className="flex items-center gap-1 text-sm text-gray-400">
                                 <Play className="h-3 w-3" />
                                 <span className="font-medium">{song.playCount}</span>
                               </div>
+                            </div>
+                            <div className="flex gap-2 mt-2 ml-11">
+                              {isClickable && (
+                                <button
+                                  onClick={() => handlePlaySong(song.id, song.categoryId, song.sectionId)}
+                                  className="flex items-center gap-1 px-3 py-1.5 bg-purple-600 hover:bg-purple-500 rounded-md text-xs font-medium transition-colors"
+                                >
+                                  <Play className="h-3 w-3" /> Watch
+                                </button>
+                              )}
+                              {selectedLanguage === "spanish" && (
+                                <button
+                                  onClick={() => handlePlayDDR(song.id, song.categoryId, song.sectionId)}
+                                  className="flex items-center gap-1 px-3 py-1.5 bg-pink-600 hover:bg-pink-500 rounded-md text-xs font-medium transition-colors"
+                                >
+                                  🎮 Play DDR
+                                </button>
+                              )}
                             </div>
                           </div>
                         )
@@ -2086,39 +2134,45 @@ export default function SingNSpeak() {
                             return (
                               <div
                                 key={song.id}
-                                className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
-                                  isClickable
-                                    ? "hover:bg-gray-800 cursor-pointer group"
-                                    : "opacity-50 cursor-not-allowed"
-                                }`}
-                                onClick={() => isClickable && handlePlaySong(song.id, category.id, section.id)}
+                                className="p-3 rounded-lg transition-all hover:bg-gray-800"
                               >
-                                <div
-                                  className={`w-8 h-8 flex items-center justify-center ${
-                                    isClickable ? "text-gray-400 group-hover:text-purple-400" : "text-gray-600"
-                                  }`}
-                                >
-                                  <span className={`text-sm font-medium ${isClickable ? "group-hover:hidden" : ""}`}>
-                                    {song.number}
-                                  </span>
-                                  {isClickable && <Play className="h-4 w-4 hidden group-hover:block" />}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="font-medium text-white truncate">{song.title}</h4>
-                                  <p className="text-sm text-gray-400 truncate">{section.title}</p>
-                                </div>
-                                {/* Updated play count display */}
-                                <div className="flex items-center gap-2 text-sm text-gray-400">
-                                  <div className="flex items-center gap-1">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 flex items-center justify-center text-gray-400">
+                                    <span className="text-sm font-medium">{song.number}</span>
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <h4 className="font-medium text-white truncate">{song.title}</h4>
+                                    <p className="text-sm text-gray-400 truncate">{section.title}</p>
+                                  </div>
+                                  <div className="flex items-center gap-1 text-sm text-gray-400">
                                     <Play className="h-3 w-3" />
                                     <span className="font-medium">{song.playCount}</span>
                                   </div>
+                                  <div className="w-6 h-6 flex items-center justify-center">
+                                    {song.completed ? (
+                                      <Star className="h-4 w-4 text-green-400 fill-current" />
+                                    ) : (
+                                      <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="w-6 h-6 flex items-center justify-center">
-                                  {song.completed ? (
-                                    <Star className="h-4 w-4 text-green-400 fill-current" />
-                                  ) : (
-                                    <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+                                {/* Action buttons */}
+                                <div className="flex gap-2 mt-2 ml-11">
+                                  {isClickable && (
+                                    <button
+                                      onClick={() => handlePlaySong(song.id, category.id, section.id)}
+                                      className="flex items-center gap-1 px-3 py-1.5 bg-purple-600 hover:bg-purple-500 rounded-md text-xs font-medium transition-colors"
+                                    >
+                                      <Play className="h-3 w-3" /> Watch
+                                    </button>
+                                  )}
+                                  {selectedLanguage === "spanish" && (
+                                    <button
+                                      onClick={() => handlePlayDDR(song.id, category.id, section.id)}
+                                      className="flex items-center gap-1 px-3 py-1.5 bg-pink-600 hover:bg-pink-500 rounded-md text-xs font-medium transition-colors"
+                                    >
+                                      🎮 Play DDR
+                                    </button>
                                   )}
                                 </div>
                               </div>
