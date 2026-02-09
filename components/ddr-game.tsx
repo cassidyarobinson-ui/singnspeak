@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, Play, Pause } from "lucide-react"
+import { translateWord } from "@/lib/spanish-dictionary"
 
 // Types
 interface KaraokeWord {
@@ -88,7 +89,7 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
       line.words.forEach((word, wordIndex) => {
         allNotes.push({
           text: word.text,
-          english: word.text, // placeholder - translations added later
+          english: translateWord(word.text),
           timestamp: word.timestamp,
           duration: word.duration,
           lane: (lineIndex + wordIndex) % 4,
@@ -175,7 +176,8 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
               noteEl.style.transform = "translateY(-50%)"
               noteEl.style.zIndex = "10"
 
-              if (showTranslations) {
+              if (showTranslations && note.english && note.english.toLowerCase() !== note.text.toLowerCase()) {
+                // English small on top, Spanish big on bottom
                 noteEl.innerHTML = `<div class="text-xs font-semibold opacity-80">${note.english}</div><div class="font-bold text-lg">${note.text}</div>`
               } else {
                 noteEl.innerHTML = `<div class="font-bold text-lg">${note.text}</div>`
@@ -263,11 +265,11 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
       let judgmentColor: string
 
       if (timeDelta <= HIT_WINDOWS.PERFECT) {
-        judgment = "PERFECTO"
+        judgment = showTranslations ? "PERFECT" : "PERFECTO"
         points = 100 + comboRef.current * 10
         judgmentColor = "text-yellow-300"
       } else if (timeDelta <= HIT_WINDOWS.GOOD) {
-        judgment = "BIEN"
+        judgment = showTranslations ? "GOOD" : "BIEN"
         points = 50 + comboRef.current * 5
         judgmentColor = "text-green-300"
       } else {
@@ -290,7 +292,7 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
 
     window.addEventListener("keydown", handleKey)
     return () => window.removeEventListener("keydown", handleKey)
-  }, [gameState])
+  }, [gameState, showTranslations])
 
   // Touch input for mobile
   useEffect(() => {
@@ -331,11 +333,11 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
         let judgmentColor: string
 
         if (timeDelta <= HIT_WINDOWS.PERFECT) {
-          judgment = "PERFECTO"
+          judgment = showTranslations ? "PERFECT" : "PERFECTO"
           points = 100 + comboRef.current * 10
           judgmentColor = "text-yellow-300"
         } else if (timeDelta <= HIT_WINDOWS.GOOD) {
-          judgment = "BIEN"
+          judgment = showTranslations ? "GOOD" : "BIEN"
           points = 50 + comboRef.current * 5
           judgmentColor = "text-green-300"
         } else {
@@ -362,7 +364,7 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
       container.addEventListener("touchstart", handleTouch, { passive: false })
       return () => container.removeEventListener("touchstart", handleTouch)
     }
-  }, [gameState])
+  }, [gameState, showTranslations])
 
   // Cleanup audio on unmount
   useEffect(() => {
@@ -442,7 +444,7 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
   }
 
   const checkEncouragement = (currentCombo: number) => {
-    const messages: Record<number, { text: string; color: string }> = {
+    const spanishMessages: Record<number, { text: string; color: string }> = {
       5: { text: "¡Bien Hecho!", color: "text-green-400" },
       10: { text: "¡Excelente!", color: "text-blue-400" },
       15: { text: "¡Increíble!", color: "text-purple-400" },
@@ -452,7 +454,22 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
       50: { text: "¡ERES INCREÍBLE!", color: "text-yellow-400" },
     }
 
-    const msg = messages[currentCombo] || (currentCombo > 50 && currentCombo % 25 === 0 ? { text: "¡IMPARABLE!", color: "text-orange-400" } : null)
+    const englishMessages: Record<number, { text: string; color: string }> = {
+      5: { text: "Nice Job!", color: "text-green-400" },
+      10: { text: "Excellent!", color: "text-blue-400" },
+      15: { text: "Incredible!", color: "text-purple-400" },
+      20: { text: "Fantastic!", color: "text-pink-400" },
+      30: { text: "AMAZING!", color: "text-yellow-300" },
+      40: { text: "PHENOMENAL!", color: "text-red-400" },
+      50: { text: "YOU'RE INCREDIBLE!", color: "text-yellow-400" },
+    }
+
+    const messages = showTranslations ? englishMessages : spanishMessages
+    const overflowMsg = showTranslations
+      ? { text: "UNSTOPPABLE!", color: "text-orange-400" }
+      : { text: "¡IMPARABLE!", color: "text-orange-400" }
+
+    const msg = messages[currentCombo] || (currentCombo > 50 && currentCombo % 25 === 0 ? overflowMsg : null)
 
     if (msg) {
       setEncouragement(msg)
@@ -563,7 +580,7 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
             onClick={startGame}
             className="w-full bg-green-600 hover:bg-green-700 py-4 rounded-xl font-bold text-2xl transition-colors"
           >
-            ▶ ¡Empezar!
+            {showTranslations ? "▶ Start!" : "▶ ¡Empezar!"}
           </button>
 
           {/* Instructions */}
@@ -590,16 +607,20 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-900 to-red-900 text-white flex items-center justify-center">
         <div className="max-w-md mx-auto p-6 text-center">
-          <h2 className="text-5xl font-bold mb-4 text-yellow-300 animate-pulse">¡Felicidades!</h2>
-          <p className="text-2xl font-bold mb-6 text-pink-300">¡Lo Hiciste Increíble!</p>
+          <h2 className="text-5xl font-bold mb-4 text-yellow-300 animate-pulse">
+            {showTranslations ? "Congrats!" : "¡Felicidades!"}
+          </h2>
+          <p className="text-2xl font-bold mb-6 text-pink-300">
+            {showTranslations ? "You Did Amazing!" : "¡Lo Hiciste Increíble!"}
+          </p>
 
           <div className="space-y-3 mb-8">
             <div className="bg-yellow-900/40 rounded-xl p-4 border-2 border-yellow-500">
-              <p className="text-yellow-200 mb-1">Puntuación Final</p>
+              <p className="text-yellow-200 mb-1">{showTranslations ? "Final Score" : "Puntuación Final"}</p>
               <span className="font-bold text-yellow-300 text-4xl">{score}</span>
             </div>
             <div className="bg-green-900/40 rounded-xl p-4 border-2 border-green-500">
-              <p className="text-green-200 mb-1">Combo Máximo</p>
+              <p className="text-green-200 mb-1">{showTranslations ? "Max Combo" : "Combo Máximo"}</p>
               <span className="font-bold text-green-300 text-4xl">×{maxCombo}</span>
             </div>
           </div>
@@ -609,7 +630,7 @@ export default function DDRGame({ songNumber, songTitle, onBack }: DDRGameProps)
               onClick={resetGame}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 rounded-xl font-bold text-xl hover:from-purple-500 hover:to-pink-500 transition-all"
             >
-              ↻ ¡Jugar Otra Vez!
+              {showTranslations ? "↻ Play Again!" : "↻ ¡Jugar Otra Vez!"}
             </button>
             <button onClick={onBack} className="w-full bg-gray-700 hover:bg-gray-600 px-8 py-3 rounded-xl font-bold transition-colors">
               Back to Songs
