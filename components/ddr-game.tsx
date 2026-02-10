@@ -292,20 +292,28 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
                 align-items: center;
                 justify-content: center;
                 text-align: center;
-                background: radial-gradient(circle at 30% 25%, rgba(173,216,255,0.6), rgba(100,180,255,0.35) 50%, rgba(59,130,246,0.25));
-                border: 1.5px solid rgba(200,225,255,0.5);
-                box-shadow: 0 0 18px rgba(59,130,246,0.3), inset 0 -6px 12px rgba(59,130,246,0.15), inset 4px 4px 12px rgba(255,255,255,0.35);
+                background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.25) 0%, rgba(173,216,255,0.15) 30%, rgba(100,180,255,0.08) 60%, rgba(59,130,246,0.12) 100%);
+                border: 1.5px solid rgba(180,210,255,0.45);
+                box-shadow: 0 0 20px rgba(59,130,246,0.2), inset 0 -8px 16px rgba(59,130,246,0.12), inset 3px 3px 8px rgba(255,255,255,0.3), inset -2px -2px 6px rgba(100,150,255,0.1);
                 overflow: visible;
                 opacity: ${opacity};
               `
 
-              // Coin inside the bubble - rounder, bubble-like with $ and larger text
+              // Coin inside the bubble — A colors, C double ring, 82% size, more bubble-like
               const englishText = (showTranslations && note.english && note.english.toLowerCase() !== note.text.toLowerCase()) ? note.english : ""
               const coinContent = englishText
                 ? `<div style="font-size:10px;font-weight:700;color:#78350F;line-height:1.1;letter-spacing:0.3px;max-width:90%;text-align:center">${englishText}</div><div style="font-size:14px;font-weight:900;color:#451A03;line-height:1.1;max-width:90%;text-align:center">${note.text}</div>`
                 : `<div style="font-size:18px;font-weight:900;color:#451A03;line-height:1.1;max-width:90%;text-align:center">${note.text}</div>`
 
-              noteEl.innerHTML = `<div style="width:88%;height:88%;border-radius:50%;background:conic-gradient(from 160deg,#D97706,#FBBF24 30%,#FDE68A 50%,#FBBF24 70%,#D97706);border:3px solid #92400E;box-shadow:0 2px 8px rgba(0,0,0,0.35),inset 0 -4px 8px rgba(120,53,0,0.3),inset 3px 3px 10px rgba(254,243,199,0.5),0 0 12px rgba(251,191,36,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:2px;position:relative"><div style="position:absolute;inset:3px;border-radius:50%;border:1.5px solid rgba(254,243,199,0.35);pointer-events:none"></div><div style="position:absolute;top:6%;left:15%;width:35%;height:22%;background:radial-gradient(ellipse,rgba(255,255,255,0.5),rgba(255,255,255,0) 70%);border-radius:50%;transform:rotate(-15deg);pointer-events:none"></div>${coinContent}</div>`
+              noteEl.innerHTML = `
+                <div style="position:absolute;top:5%;left:12%;width:30%;height:18%;background:radial-gradient(ellipse,rgba(255,255,255,0.5),rgba(255,255,255,0) 70%);border-radius:50%;transform:rotate(-20deg);pointer-events:none;z-index:2"></div>
+                <div style="position:absolute;bottom:12%;right:10%;width:20%;height:8%;background:radial-gradient(ellipse,rgba(255,255,255,0.25),rgba(255,255,255,0) 70%);border-radius:50%;transform:rotate(15deg);pointer-events:none;z-index:2"></div>
+                <div style="width:82%;height:82%;border-radius:50%;background:conic-gradient(from 160deg,#D97706,#FBBF24 30%,#FDE68A 50%,#FBBF24 70%,#D97706);border:3px solid #92400E;box-shadow:0 2px 8px rgba(0,0,0,0.35),inset 0 -4px 8px rgba(120,53,0,0.3),inset 3px 3px 10px rgba(254,243,199,0.5),0 0 10px rgba(251,191,36,0.25);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:2px;position:relative">
+                  <div style="position:absolute;inset:3px;border-radius:50%;border:2px solid rgba(254,243,199,0.4);pointer-events:none"></div>
+                  <div style="position:absolute;inset:8px;border-radius:50%;border:1px solid rgba(254,243,199,0.2);pointer-events:none"></div>
+                  <div style="position:absolute;top:8%;left:15%;width:32%;height:20%;background:radial-gradient(ellipse,rgba(255,255,255,0.5),rgba(255,255,255,0) 70%);border-radius:50%;transform:rotate(-15deg);pointer-events:none"></div>
+                  ${coinContent}
+                </div>`
 
               container.appendChild(noteEl)
             }
@@ -674,8 +682,9 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
       : `<div style="font-size:14px;font-weight:900;color:#3D1D00;line-height:1.1;max-width:90%;text-align:center;text-shadow:0 0.5px 0 rgba(255,255,255,0.3)">${noteText}</div>`
     coin.innerHTML = `
       <div style="width:56px;height:56px;border-radius:50%;background:conic-gradient(from 160deg,#D97706,#FBBF24 30%,#FDE68A 50%,#FBBF24 70%,#D97706);border:3px solid #92400E;box-shadow:0 3px 10px rgba(0,0,0,0.5),inset 0 -3px 6px rgba(120,53,0,0.4),inset 2px 2px 6px rgba(254,243,199,0.5),0 0 12px rgba(251,191,36,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:2px;position:relative">
-        <div style="position:absolute;inset:3px;border-radius:50%;border:1.5px solid rgba(254,243,199,0.4);pointer-events:none"></div>
-        <div style="position:absolute;top:6%;left:15%;width:35%;height:22%;background:radial-gradient(ellipse,rgba(255,255,255,0.55),rgba(255,255,255,0) 70%);border-radius:50%;transform:rotate(-15deg);pointer-events:none"></div>
+        <div style="position:absolute;inset:3px;border-radius:50%;border:2px solid rgba(254,243,199,0.4);pointer-events:none"></div>
+        <div style="position:absolute;inset:7px;border-radius:50%;border:1px solid rgba(254,243,199,0.2);pointer-events:none"></div>
+        <div style="position:absolute;top:8%;left:15%;width:32%;height:20%;background:radial-gradient(ellipse,rgba(255,255,255,0.5),rgba(255,255,255,0) 70%);border-radius:50%;transform:rotate(-15deg);pointer-events:none"></div>
         ${coinText}
       </div>
     `
