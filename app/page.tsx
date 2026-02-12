@@ -1687,36 +1687,6 @@ export default function HablaBeat() {
     )
   }
 
-  // Embedded Video Player — uses iframe embed to hide YouTube branding
-  const VideoPlayer = ({ videoId }: { videoId: string }) => {
-    if (!videoId) {
-      return (
-        <div className="aspect-video bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-8xl mb-4">{currentSong?.sectionIcon}</div>
-            <p className="text-white/80 text-sm">Video coming soon</p>
-          </div>
-        </div>
-      )
-    }
-
-    const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&cc_load_policy=0&fs=0&playsinline=1&controls=1&disablekb=0&origin=${typeof window !== "undefined" ? window.location.origin : ""}`
-
-    return (
-      <div className="aspect-video rounded-xl overflow-hidden bg-black relative">
-        <iframe
-          src={embedUrl}
-          className="w-full h-full border-0"
-          allow="autoplay; encrypted-media"
-          allowFullScreen={false}
-        />
-        {/* Overlays to cover branding */}
-        <div className="absolute bottom-0 right-0 w-28 h-9 bg-gradient-to-l from-black via-black/95 to-transparent z-10 pointer-events-none" />
-        <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black via-black/60 to-transparent z-10 pointer-events-none" />
-      </div>
-    )
-  }
-
   // DDR Game View
   if (currentView === "ddr" && currentSong && selectedLanguage === "spanish") {
     return (
@@ -1756,7 +1726,26 @@ export default function HablaBeat() {
 
           {/* Video */}
           <div className="px-4 mb-4">
-            <VideoPlayer videoId={currentSong.youtubeId} />
+            {currentSong.youtubeId ? (
+              <div className="aspect-video rounded-xl overflow-hidden bg-black relative">
+                <iframe
+                  key={currentSong.youtubeId}
+                  src={`https://www.youtube-nocookie.com/embed/${currentSong.youtubeId}?autoplay=1&rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&cc_load_policy=0&fs=0&playsinline=1&controls=1&disablekb=0`}
+                  className="w-full h-full border-0"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen={false}
+                />
+                <div className="absolute bottom-0 right-0 w-28 h-9 bg-gradient-to-l from-black via-black/95 to-transparent z-10 pointer-events-none" />
+                <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black via-black/60 to-transparent z-10 pointer-events-none" />
+              </div>
+            ) : (
+              <div className="aspect-video bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-6xl mb-2">{currentSong.sectionIcon}</div>
+                  <p className="text-white/80 text-sm">Video coming soon</p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Sing Along Section */}
