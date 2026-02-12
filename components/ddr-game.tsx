@@ -1034,12 +1034,13 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/super-bunny-animated.webp"
-                alt="Super Bunny"
+                alt="Blue Bunny"
                 className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.1)]"
+                style={{ filter: "brightness(0) saturate(100%) invert(35%) sepia(90%) saturate(800%) hue-rotate(195deg) brightness(95%)" }}
               />
             </div>
-            <p className="text-purple-600 text-xs italic">
-              {showTranslations ? "Super Bunny celebrates your victory!" : "¡Súper Conejito celebra tu victoria!"}
+            <p className="text-blue-600 text-xs italic">
+              {showTranslations ? "Blue Bunny celebrates your victory!" : "¡Conejito Azul celebra tu victoria!"}
             </p>
           </div>
         </div>

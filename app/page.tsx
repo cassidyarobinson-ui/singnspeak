@@ -1877,20 +1877,25 @@ export default function HablaBeat() {
           {/* Header */}
           <div className="text-gray-900 p-4">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-44 h-44 bg-white rounded-full p-3 flex-shrink-0 border-2 border-gray-200 overflow-hidden shadow-md">
+              <div className="w-44 h-44 flex-shrink-0 relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/super-bunny.gif"
-                  alt="Super Bunny"
+                  alt="Blue Bunny"
                   className="w-full h-full object-contain"
+                  style={{ filter: "brightness(0) saturate(100%) invert(35%) sepia(90%) saturate(800%) hue-rotate(195deg) brightness(95%)" }}
                 />
+                {/* Heart overlay replacing S on chest */}
+                <svg className="absolute" style={{ top: "52%", left: "38%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
               </div>
               <div className="flex-1 text-left">
                 <h1 className="text-3xl font-bold mb-1 mt-3 text-gray-900">HablaBeat</h1>
-                <p className="text-purple-700 text-lg">Your Vocab Bank 💰</p>
+                <p className="text-blue-600 text-lg">Your Vocab Bank 💰</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Coins className="h-4 w-4 text-purple-600" />
-                  <span className="text-purple-600 font-medium">
+                  <Coins className="h-4 w-4 text-blue-600" />
+                  <span className="text-blue-600 font-medium">
                     {earnedCoins.length} coins collected
                   </span>
                 </div>
@@ -1971,18 +1976,23 @@ export default function HablaBeat() {
           {/* Header with Super Bunny */}
           <div className="text-gray-900 p-4">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-44 h-44 bg-white rounded-full p-3 flex-shrink-0 border-2 border-gray-200 overflow-hidden shadow-md">
+              <div className="w-44 h-44 flex-shrink-0 relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/super-bunny.gif"
-                  alt="Super Bunny"
+                  alt="Blue Bunny"
                   className="w-full h-full object-contain"
+                  style={{ filter: "brightness(0) saturate(100%) invert(35%) sepia(90%) saturate(800%) hue-rotate(195deg) brightness(95%)" }}
                 />
+                {/* Heart overlay replacing S on chest */}
+                <svg className="absolute" style={{ top: "52%", left: "38%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
               </div>
               <div className="flex-1 text-left">
                 <h1 className="text-3xl font-bold mb-1 mt-3 text-gray-900">HablaBeat</h1>
-                <p className="text-purple-700 text-lg leading-tight">Collect coins with</p>
-                <p className="text-purple-700 text-lg leading-tight pl-2">Super Bunny!</p>
+                <p className="text-blue-600 text-lg leading-tight">Collect coins with</p>
+                <p className="text-blue-600 text-lg leading-tight font-bold">Blue Bunny!</p>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-xl">🔥</span>
                   <span className="text-orange-600 font-bold">Best Flow: {bestFlow}</span>
