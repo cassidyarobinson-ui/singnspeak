@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
-import { ChevronDown, Play, Pause } from "lucide-react"
+import { ChevronLeft, Play, Pause } from "lucide-react"
 import { translateWord } from "@/lib/spanish-dictionary"
 import Image from "next/image"
 
@@ -807,7 +807,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
             <div className="relative px-4 py-5">
               <div className="flex items-center justify-between mb-3">
                 <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" onClick={onBack}>
-                  <ChevronDown className="h-6 w-6" />
+                  <ChevronLeft className="h-6 w-6" />
                 </Button>
                 <h1 className="text-2xl font-black text-center flex-1 tracking-wider uppercase" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>🎮 PLAY</h1>
                 <div className="w-10" />
@@ -820,13 +820,35 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
           </div>
 
           {/* Your Mission - moved under header */}
-          <div className="bg-blue-900/40 rounded-xl p-3 text-sm mb-4 border border-blue-400/30">
-            <p className="font-bold mb-1 text-blue-200">🎯 Your Mission:</p>
-            <p className="text-purple-200">Pop the bubbles with your carrot arrows to get your vocab bank back!</p>
+          <div className="bg-blue-900/80 rounded-xl p-3 text-sm mb-4 border border-blue-400/40">
+            <p className="font-bold mb-1 text-white">🎯 Your Mission:</p>
+            <p className="text-white">Pop the bubbles with your carrot arrows to get your vocab bank back!</p>
           </div>
 
           {/* Settings */}
           <div className="bg-black bg-opacity-40 rounded-xl p-6 space-y-6 mb-6">
+            {/* Speed Selection */}
+            <div>
+              <label className="block mb-3 font-semibold">Song Speed</label>
+              <div className="flex gap-3">
+                {(["slow", "medium", "fast"] as const).map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSpeed(s)}
+                    className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all ${
+                      speed === s
+                        ? s === "slow" ? "bg-green-600 text-white shadow-lg shadow-green-600/30"
+                        : s === "medium" ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                        : "bg-red-600 text-white shadow-lg shadow-red-600/30"
+                        : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                    }`}
+                  >
+                    {s === "slow" ? "🐢 Slow" : s === "medium" ? "🎵 Medium" : "⚡ Fast"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Translations toggle */}
             <div>
               <label className="block mb-2 font-semibold">English Translations</label>
@@ -841,31 +863,6 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
                 </button>
                 <span className="text-purple-200">{showTranslations ? "ON" : "OFF"} - See word meanings</span>
               </div>
-            </div>
-
-            {/* Speed Selection */}
-            <div>
-              <label className="block mb-3 font-semibold">Speed</label>
-              <div className="flex gap-3">
-                {(["slow", "medium", "fast"] as const).map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => setSpeed(s)}
-                    className={`flex-1 py-3 rounded-xl font-bold text-sm transition-all ${
-                      speed === s
-                        ? s === "slow" ? "bg-green-600 text-white shadow-lg shadow-green-600/30"
-                        : s === "medium" ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
-                        : "bg-red-600 text-white shadow-lg shadow-red-600/30"
-                        : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-                    }`}
-                  >
-                    {s === "slow" ? "🐢 Slow" : s === "medium" ? "🎵 Medium" : "⚡ Fast (Normal)"}
-                  </button>
-                ))}
-              </div>
-              <p className="text-xs text-purple-300 mt-2 text-center">
-                {speed === "slow" ? "0.65× speed — more time to react" : speed === "medium" ? "0.85× speed — a bit slower" : "Normal speed"}
-              </p>
             </div>
 
             {/* Total bubbles info */}

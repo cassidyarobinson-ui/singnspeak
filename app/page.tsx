@@ -13,7 +13,7 @@ import {
   SkipForward,
   Shuffle,
   Repeat,
-  ChevronDown,
+  ChevronLeft,
   ChevronRight,
   MoreHorizontal,
   Coins,
@@ -1739,7 +1739,7 @@ export default function HablaBeat() {
               className="text-white hover:bg-white/10"
               onClick={() => setCurrentView("songs")}
             >
-              <ChevronDown className="h-6 w-6" />
+              <ChevronLeft className="h-6 w-6" />
             </Button>
             <div className="text-center">
               <p className="text-sm text-gray-300">Playing from HablaBeat</p>
@@ -1950,10 +1950,10 @@ export default function HablaBeat() {
               <div className="flex-1 text-left">
                 <h1 className="text-3xl font-bold mb-1 mt-3">HablaBeat</h1>
                 <p className="text-purple-100 text-lg leading-tight">Collect coins with</p>
-                <p className="text-purple-100 text-lg leading-tight pl-4">Super Bunny!</p>
+                <p className="text-purple-100 text-lg leading-tight pl-2">Super Bunny!</p>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-xl">🔥</span>
-                  <span className="text-orange-300 font-bold">Best Flow Ever: {bestFlow}</span>
+                  <span className="text-orange-300 font-bold">Best Flow: {bestFlow}</span>
                 </div>
               </div>
             </div>
@@ -2015,7 +2015,10 @@ export default function HablaBeat() {
                                 : "opacity-40"
                             }`}
                           >
-                            <span className="text-lg">{section.icon}</span>
+                            {section.id === "ar-verbs" ? <span className="text-sm font-black text-cyan-600">AR</span>
+                              : section.id === "er-verbs" ? <span className="text-sm font-black text-emerald-600">ER</span>
+                              : section.id === "ir-verbs" ? <span className="text-sm font-black text-purple-600">IR</span>
+                              : <span className="text-lg">{section.icon}</span>}
                           </div>
                           <div className="flex-1 text-left">
                             <h2 className="text-base font-bold text-white">{section.title}</h2>
@@ -2023,10 +2026,6 @@ export default function HablaBeat() {
                               {section.songs.length} songs • {section.songs.reduce((sum, song) => sum + song.playCount, 0)} plays
                             </div>
                           </div>
-                          {/* Verb type icon for verb sections */}
-                          {section.id === "ar-verbs" && <span className="text-lg font-black text-cyan-400">AR</span>}
-                          {section.id === "er-verbs" && <span className="text-lg font-black text-emerald-400">ER</span>}
-                          {section.id === "ir-verbs" && <span className="text-lg font-black text-purple-400">IR</span>}
                           <div className={`transition-transform duration-200 ${isOpen ? "rotate-90" : ""}`}>
                             <ChevronRight className="h-4 w-4 text-gray-400" />
                           </div>
