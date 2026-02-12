@@ -1409,7 +1409,13 @@ export default function HablaBeat() {
   // Singing detection: start/stop mic
   const startMic = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      })
       micStreamRef.current = stream
       const audioContext = new AudioContext()
       const source = audioContext.createMediaStreamSource(stream)
@@ -1647,19 +1653,19 @@ export default function HablaBeat() {
 
     return (
       <div
-        className="bg-gray-800 border-t border-gray-700 p-3 cursor-pointer hover:bg-gray-750 transition-colors"
+        className="bg-white border-t border-gray-200 p-3 cursor-pointer hover:bg-gray-50 transition-colors shadow-sm"
         onClick={() => setCurrentView("player")}
       >
         <div className="flex items-center gap-3">
           {/* Album Art */}
-          <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center flex-shrink-0">
             <span className="text-2xl">{currentSong.sectionIcon}</span>
           </div>
 
           {/* Song Info */}
           <div className="flex-1 min-w-0">
-            <h4 className="font-medium text-white text-sm truncate">{currentSong.title}</h4>
-            <p className="text-xs text-gray-400 truncate">{currentSong.sectionTitle}</p>
+            <h4 className="font-medium text-gray-900 text-sm truncate">{currentSong.title}</h4>
+            <p className="text-xs text-gray-500 truncate">{currentSong.sectionTitle}</p>
           </div>
 
           {/* Controls */}
@@ -1667,7 +1673,7 @@ export default function HablaBeat() {
             <Button
               variant="ghost"
               size="icon"
-              className="w-8 h-8 text-white hover:bg-gray-700"
+              className="w-8 h-8 text-gray-700 hover:bg-gray-100"
               onClick={(e) => {
                 e.stopPropagation()
                 setIsPlaying(!isPlaying)
@@ -1729,21 +1735,21 @@ export default function HablaBeat() {
 
   if (currentView === "player" && currentSong) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
-        <div className="max-w-md mx-auto bg-gradient-to-b from-gray-900 to-black min-h-screen">
+      <div className="min-h-screen bg-gray-50 text-gray-900">
+        <div className="max-w-md mx-auto bg-gray-50 min-h-screen">
           {/* Header */}
           <div className="flex items-center justify-between p-4 pt-8">
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/10"
+              className="text-gray-700 hover:bg-gray-200"
               onClick={() => { stopMic(); setCurrentView("songs") }}
             >
               <ChevronLeft className="h-6 w-6" />
             </Button>
             <div className="text-center flex-1">
-              <h1 className="text-lg font-bold">{currentSong.title}</h1>
-              <p className="text-xs text-gray-400">{currentSong.sectionTitle}</p>
+              <h1 className="text-lg font-bold text-gray-900">{currentSong.title}</h1>
+              <p className="text-xs text-gray-500">{currentSong.sectionTitle}</p>
             </div>
             <div className="w-10" />
           </div>
@@ -1755,18 +1761,18 @@ export default function HablaBeat() {
 
           {/* Sing Along Section */}
           <div className="px-4 mb-4">
-            <div className="bg-gray-800/60 rounded-xl p-4">
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-purple-300">🎤 Sing Along</h3>
+                <h3 className="text-sm font-bold text-purple-700">🎤 Sing Along</h3>
                 {isMicActive && (
-                  <span className="text-yellow-300 font-bold text-lg">⭐ {singScore}</span>
+                  <span className="text-yellow-600 font-bold text-lg">⭐ {singScore}</span>
                 )}
               </div>
 
               {!isMicActive ? (
                 <button
                   onClick={startMic}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-bold text-base transition-all"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-bold text-base text-white transition-all"
                 >
                   <Mic className="h-5 w-5" />
                   Start Singing!
@@ -1775,7 +1781,7 @@ export default function HablaBeat() {
                 <div className="space-y-3">
                   {/* Live volume meter */}
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-4 bg-gray-700 rounded-full overflow-hidden">
+                    <div className="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all duration-75"
                         style={{
@@ -1786,19 +1792,19 @@ export default function HablaBeat() {
                             ? "linear-gradient(90deg, #22c55e, #eab308)"
                             : singLevel > 10
                             ? "#22c55e"
-                            : "#6b7280",
+                            : "#d1d5db",
                         }}
                       />
                     </div>
-                    <span className="text-xs text-gray-400 w-8 text-right">{singLevel}%</span>
+                    <span className="text-xs text-gray-500 w-8 text-right">{singLevel}%</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-gray-500">
                       {singLevel > 40 ? "🔥 Great singing!" : singLevel > 15 ? "🎵 Keep going!" : "🎤 Sing louder!"}
                     </p>
                     <button
                       onClick={stopMic}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600/80 hover:bg-red-500 rounded-lg text-xs font-bold transition-all"
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-400 rounded-lg text-xs font-bold text-white transition-all"
                     >
                       <MicOff className="h-3.5 w-3.5" />
                       Stop
@@ -1815,7 +1821,7 @@ export default function HablaBeat() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-gray-700 hover:bg-gray-200"
                 onClick={handlePreviousSong}
                 disabled={currentSongIndex === 0}
               >
@@ -1824,7 +1830,7 @@ export default function HablaBeat() {
               {selectedLanguage === "spanish" && (
                 <button
                   onClick={() => { stopMic(); setCurrentView("ddr") }}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-pink-600 hover:bg-pink-500 rounded-full font-bold text-sm transition-colors"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-pink-600 hover:bg-pink-500 rounded-full font-bold text-sm text-white transition-colors"
                 >
                   🥕 Play Mode
                 </button>
@@ -1832,7 +1838,7 @@ export default function HablaBeat() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-white hover:bg-white/10"
+                className="text-gray-700 hover:bg-gray-200"
                 onClick={handleNextSong}
                 disabled={currentSongIndex === allSongs.length - 1}
               >
@@ -1842,11 +1848,11 @@ export default function HablaBeat() {
           </div>
 
           {/* Bottom Navigation */}
-          <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-gray-900 border-t border-gray-800 p-4">
+          <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-white border-t border-gray-200 p-4 shadow-lg">
             <div className="flex justify-around">
               <Button
                 variant="ghost"
-                className="flex flex-col items-center gap-1 text-white pt-3"
+                className="flex flex-col items-center gap-1 text-gray-900 pt-3"
                 onClick={() => { stopMic(); setCurrentView("songs") }}
               >
                 <BookOpen className="h-5 w-5" />
@@ -1854,7 +1860,7 @@ export default function HablaBeat() {
               </Button>
               <Button
                 variant="ghost"
-                className="flex flex-col items-center gap-1 text-gray-400 pt-3"
+                className="flex flex-col items-center gap-1 text-gray-500 pt-3"
                 onClick={() => { stopMic(); setCurrentView("coins") }}
               >
                 <Coins className="h-5 w-5" />
@@ -1877,12 +1883,12 @@ export default function HablaBeat() {
     })
 
     return (
-      <div className="min-h-screen bg-gray-900">
-        <div className="max-w-md mx-auto bg-gray-900 min-h-screen">
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-md mx-auto bg-gray-50 min-h-screen">
           {/* Header */}
-          <div className="text-white p-4">
+          <div className="text-gray-900 p-4">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-44 h-44 bg-white rounded-full p-3 flex-shrink-0 border-2 border-white overflow-hidden">
+              <div className="w-44 h-44 bg-white rounded-full p-3 flex-shrink-0 border-2 border-gray-200 overflow-hidden shadow-md">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/super-bunny.gif"
@@ -1891,11 +1897,11 @@ export default function HablaBeat() {
                 />
               </div>
               <div className="flex-1 text-left">
-                <h1 className="text-3xl font-bold mb-1 mt-3">HablaBeat</h1>
-                <p className="text-purple-100 text-lg">Your Vocab Bank 💰</p>
+                <h1 className="text-3xl font-bold mb-1 mt-3 text-gray-900">HablaBeat</h1>
+                <p className="text-purple-700 text-lg">Your Vocab Bank 💰</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Coins className="h-4 w-4 text-purple-300" />
-                  <span className="text-purple-200 font-medium">
+                  <Coins className="h-4 w-4 text-purple-600" />
+                  <span className="text-purple-600 font-medium">
                     {earnedCoins.length} coins collected
                   </span>
                 </div>
@@ -1905,23 +1911,23 @@ export default function HablaBeat() {
 
           {/* Coin Collection Display */}
           <div className="px-4 space-y-4">
-            <h2 className="text-xl font-bold text-white mb-4">Coins Collected</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Coins Collected</h2>
 
             {earnedCoins.length === 0 ? (
               <div className="text-center py-8">
                 <div className="text-6xl mb-4">🪙</div>
-                <p className="text-gray-400">No coins earned yet!</p>
-                <p className="text-gray-500 text-sm mt-2">Play and Sing songs to earn coins</p>
+                <p className="text-gray-500">No coins earned yet!</p>
+                <p className="text-gray-400 text-sm mt-2">Play and Sing songs to earn coins</p>
               </div>
             ) : (
               <div className="grid grid-cols-3 gap-4">
                 {earnedCoins.map((coin) => (
                     <div key={coin.id} className="flex flex-col items-center">
-                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 border-4 border-yellow-300 shadow-lg flex items-center justify-center relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent"></div>
+                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-500 border-4 border-yellow-400 shadow-lg flex items-center justify-center relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent"></div>
                         <span className="text-2xl relative z-10">{coin.icon}</span>
                       </div>
-                      <h3 className="font-bold text-white text-xs mt-2 text-center">{coin.name}</h3>
+                      <h3 className="font-bold text-gray-800 text-xs mt-2 text-center">{coin.name}</h3>
                     </div>
                   ))}
               </div>
@@ -1930,11 +1936,11 @@ export default function HablaBeat() {
             {/* Not Yet Collected - greyed out, emoji only, 5 per row */}
             {notYetCollected.length > 0 && (
               <div className="mt-8">
-                <h3 className="text-lg font-bold text-white mb-2">Not Yet Collected</h3>
-                <p className="text-xs text-gray-400 mb-4 italic">Play and Sing a song 3 times to unlock</p>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Not Yet Collected</h3>
+                <p className="text-xs text-gray-500 mb-4 italic">Play and Sing a song 3 times to unlock</p>
                 <div className="flex flex-wrap gap-3">
                   {notYetCollected.map((section) => (
-                    <div key={section.id} className="w-14 h-14 rounded-full bg-gray-700/50 border-2 border-gray-600/30 flex items-center justify-center opacity-40">
+                    <div key={section.id} className="w-14 h-14 rounded-full bg-gray-200 border-2 border-gray-300 flex items-center justify-center opacity-40">
                       <span className="text-2xl grayscale">{section.icon}</span>
                     </div>
                   ))}
@@ -1944,11 +1950,11 @@ export default function HablaBeat() {
           </div>
 
           {/* Bottom Navigation */}
-          <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-gray-900 border-t border-gray-800 p-4">
+          <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-white border-t border-gray-200 p-4 shadow-lg">
             <div className="flex justify-around">
               <Button
                 variant="ghost"
-                className="flex flex-col items-center gap-1 text-white pt-3"
+                className="flex flex-col items-center gap-1 text-gray-900 pt-3"
                 onClick={() => setCurrentView("songs")}
               >
                 <BookOpen className="h-5 w-5" />
@@ -1956,7 +1962,7 @@ export default function HablaBeat() {
               </Button>
               <Button
                 variant="ghost"
-                className="flex flex-col items-center gap-1 text-white pt-3"
+                className="flex flex-col items-center gap-1 text-gray-900 pt-3"
                 onClick={() => setCurrentView("coins")}
               >
                 <Coins className="h-5 w-5" />
@@ -1971,12 +1977,12 @@ export default function HablaBeat() {
 
   if (currentView === "songs") {
     return (
-      <div className="min-h-screen bg-gray-900">
-        <div className="max-w-md mx-auto bg-gray-900 min-h-screen">
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-md mx-auto bg-gray-50 min-h-screen">
           {/* Header with Super Bunny */}
-          <div className="text-white p-4">
+          <div className="text-gray-900 p-4">
             <div className="flex items-center gap-4 mb-4">
-              <div className="w-44 h-44 bg-white rounded-full p-3 flex-shrink-0 border-2 border-white overflow-hidden">
+              <div className="w-44 h-44 bg-white rounded-full p-3 flex-shrink-0 border-2 border-gray-200 overflow-hidden shadow-md">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/super-bunny.gif"
@@ -1985,24 +1991,24 @@ export default function HablaBeat() {
                 />
               </div>
               <div className="flex-1 text-left">
-                <h1 className="text-3xl font-bold mb-1 mt-3">HablaBeat</h1>
-                <p className="text-purple-100 text-lg leading-tight">Collect coins with</p>
-                <p className="text-purple-100 text-lg leading-tight pl-2">Super Bunny!</p>
+                <h1 className="text-3xl font-bold mb-1 mt-3 text-gray-900">HablaBeat</h1>
+                <p className="text-purple-700 text-lg leading-tight">Collect coins with</p>
+                <p className="text-purple-700 text-lg leading-tight pl-2">Super Bunny!</p>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-xl">🔥</span>
-                  <span className="text-orange-300 font-bold">Best Flow: {bestFlow}</span>
+                  <span className="text-orange-600 font-bold">Best Flow: {bestFlow}</span>
                 </div>
               </div>
             </div>
 
             {/* Vocab Bank */}
             <div className="px-4 mb-3">
-              <div className="bg-yellow-900/30 rounded-xl p-3 border border-yellow-600/40 flex items-center justify-between">
+              <div className="bg-yellow-100 rounded-xl p-3 border border-yellow-300 flex items-center justify-between shadow-sm">
                 <div className="flex items-center gap-2">
                   <span className="text-2xl">💰</span>
-                  <span className="text-yellow-200 font-bold text-lg">Vocab Bank</span>
+                  <span className="text-yellow-800 font-bold text-lg">Vocab Bank</span>
                 </div>
-                <span className="text-yellow-300 font-black text-2xl">{totalVocabBank}</span>
+                <span className="text-yellow-700 font-black text-2xl">{totalVocabBank}</span>
               </div>
             </div>
 
@@ -2012,11 +2018,11 @@ export default function HablaBeat() {
                 <div key={category.id} className="space-y-2">
                   {/* Main Category Header */}
                   <div className="px-4 pt-4 pb-2">
-                    <h1 className="text-2xl font-bold text-white">{category.title}</h1>
-                    <div className="text-sm text-gray-400 mt-1">
+                    <h1 className="text-2xl font-bold text-gray-900">{category.title}</h1>
+                    <div className="text-sm text-gray-500 mt-1">
                       {category.sections.reduce((sum, section) => sum + section.songs.length, 0)} songs total
                     </div>
-                    <div className="h-0.5 bg-gray-600 rounded-full mt-3 overflow-hidden">
+                    <div className="h-0.5 bg-gray-200 rounded-full mt-3 overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500"
                         style={{
@@ -2041,25 +2047,25 @@ export default function HablaBeat() {
                         {/* Section Header - clickable accordion toggle */}
                         <button
                           onClick={() => setOpenSectionId(isOpen ? "" : section.id)}
-                          className={`w-full p-3 px-4 flex items-center gap-3 transition-all ${
-                            isOpen ? "bg-gray-800/60" : "hover:bg-gray-800/30"
+                          className={`w-full p-3 px-4 flex items-center gap-3 transition-all rounded-lg ${
+                            isOpen ? "bg-white shadow-sm" : "hover:bg-white/60"
                           } ${isSectionBadgeUnlocked(section) ? "border-l-4 border-yellow-400" : ""}`}
                         >
                           <div
-                            className={`w-10 h-10 rounded-full bg-white flex items-center justify-center flex-shrink-0 transition-all ${
+                            className={`w-10 h-10 rounded-full bg-gradient-to-br from-yellow-300 via-yellow-400 to-yellow-500 flex items-center justify-center flex-shrink-0 transition-all shadow-sm ${
                               isSectionBadgeUnlocked(section)
-                                ? "border-2 border-yellow-400 shadow-lg shadow-yellow-400/30"
-                                : "opacity-40"
+                                ? "border-2 border-yellow-500 shadow-lg shadow-yellow-400/30"
+                                : "opacity-50 from-gray-200 via-gray-300 to-gray-400"
                             }`}
                           >
-                            {section.id === "ar-verbs" ? <span className="text-sm font-black text-cyan-600">AR</span>
-                              : section.id === "er-verbs" ? <span className="text-sm font-black text-emerald-600">ER</span>
-                              : section.id === "ir-verbs" ? <span className="text-sm font-black text-purple-600">IR</span>
+                            {section.id === "ar-verbs" ? <span className="text-sm font-black text-cyan-700">AR</span>
+                              : section.id === "er-verbs" ? <span className="text-sm font-black text-emerald-700">ER</span>
+                              : section.id === "ir-verbs" ? <span className="text-sm font-black text-purple-700">IR</span>
                               : <span className="text-lg">{section.icon}</span>}
                           </div>
                           <div className="flex-1 text-left">
-                            <h2 className="text-base font-bold text-white">{section.title}</h2>
-                            <div className="text-xs text-gray-400">
+                            <h2 className="text-base font-bold text-gray-900">{section.title}</h2>
+                            <div className="text-xs text-gray-500">
                               {section.songs.length} songs • {section.songs.reduce((sum, song) => sum + song.playCount, 0)} plays
                             </div>
                           </div>
@@ -2070,25 +2076,25 @@ export default function HablaBeat() {
 
                         {/* Song List - only shown when section is open */}
                         {isOpen && (
-                          <div className="space-y-0.5 pl-4 pr-2 pb-2 bg-gray-800/20">
+                          <div className="space-y-0.5 pl-4 pr-2 pb-2 bg-white/50">
                             {section.songs.map((song) => {
                               const isClickable = song.youtubeId && song.youtubeId !== ""
                               const songBestGrade = bestGrades[song.number]
                               return (
                                 <div
                                   key={song.id}
-                                  className="p-2.5 rounded-lg transition-all hover:bg-gray-800"
+                                  className="p-2.5 rounded-lg transition-all hover:bg-gray-100"
                                 >
                                   <div className="flex items-center gap-3">
-                                    <div className="w-7 h-7 flex items-center justify-center text-gray-400">
+                                    <div className="w-7 h-7 flex items-center justify-center text-gray-500">
                                       <span className="text-sm font-medium">{song.number}</span>
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                      <h4 className="font-bold text-white truncate text-base">{song.title}</h4>
+                                      <h4 className="font-bold text-gray-900 truncate text-base">{song.title}</h4>
                                     </div>
                                     {/* Best grade badge */}
                                     {songBestGrade && (
-                                      <span className="text-xs font-black px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-300 border border-yellow-500/40">
+                                      <span className="text-xs font-black px-2 py-0.5 rounded-full bg-yellow-100 text-yellow-700 border border-yellow-300">
                                         {songBestGrade}
                                       </span>
                                     )}
@@ -2106,7 +2112,7 @@ export default function HablaBeat() {
                                     {isClickable && (
                                       <button
                                         onClick={() => handlePlaySong(song.id, category.id, section.id)}
-                                        className="flex items-center gap-1.5 px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-lg text-sm font-bold text-white transition-colors"
+                                        className="flex items-center gap-1.5 px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm font-bold text-white transition-colors"
                                       >
                                         🎤 Sing
                                       </button>
@@ -2128,11 +2134,11 @@ export default function HablaBeat() {
             <MiniPlayer />
 
             {/* Bottom Navigation */}
-            <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-gray-900 border-t border-gray-800 p-4">
+            <div className="fixed bottom-0 left-1/2 transform -translate-x-1/2 w-full max-w-md bg-white border-t border-gray-200 p-4 shadow-lg">
               <div className="flex justify-around">
                 <Button
                   variant="ghost"
-                  className="flex flex-col items-center gap-1 text-white pt-3"
+                  className="flex flex-col items-center gap-1 text-gray-900 pt-3"
                   onClick={() => setCurrentView("songs")}
                 >
                   <BookOpen className="h-5 w-5" />
@@ -2140,7 +2146,7 @@ export default function HablaBeat() {
                 </Button>
                 <Button
                   variant="ghost"
-                  className="flex flex-col items-center gap-1 text-gray-400 pt-3"
+                  className="flex flex-col items-center gap-1 text-gray-500 pt-3"
                   onClick={() => setCurrentView("coins")}
                 >
                   <Coins className="h-5 w-5" />

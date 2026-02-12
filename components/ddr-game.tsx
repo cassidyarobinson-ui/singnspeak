@@ -806,10 +806,10 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
   // LOADING STATE
   if (gameState === "loading") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 text-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="text-4xl mb-4 animate-pulse">🎵</div>
-          <p className="text-gray-400">Loading timing data...</p>
+          <p className="text-gray-500">Loading timing data...</p>
         </div>
       </div>
     )
@@ -819,37 +819,36 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
   if (gameState === "setup") {
     const setupBgUrl = `/images/backgrounds/song-${songNumber}.jpg`
     return (
-      <div className="min-h-screen text-white" style={{ background: `url(${setupBgUrl}) center/cover no-repeat fixed`, backgroundColor: "#1a0a2e" }}>
+      <div className="min-h-screen text-gray-900 bg-gray-50">
         <div className="max-w-md mx-auto p-4">
-          {/* Header with gradient */}
-          <div className="relative rounded-2xl overflow-hidden mb-4 mt-4" style={{ background: "linear-gradient(135deg, rgba(88,28,135,0.85), rgba(15,23,42,0.85) 50%, rgba(30,58,138,0.85))" }}>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+          {/* Header */}
+          <div className="relative rounded-2xl overflow-hidden mb-4 mt-4 bg-gradient-to-br from-purple-600 to-pink-600">
             <div className="relative px-4 py-5">
               <div className="flex items-center justify-between mb-3">
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10" onClick={onBack}>
+                <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" onClick={onBack}>
                   <ChevronLeft className="h-6 w-6" />
                 </Button>
-                <h1 className="text-2xl font-black text-center flex-1 tracking-wider uppercase" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>🎮 PLAY</h1>
+                <h1 className="text-2xl font-black text-center flex-1 tracking-wider uppercase text-white">🎮 PLAY</h1>
                 <div className="w-10" />
               </div>
               <div className="text-center">
-                <h2 className="text-2xl font-bold mb-1" style={{ textShadow: "0 2px 6px rgba(0,0,0,0.5)" }}>{songTitle}</h2>
+                <h2 className="text-2xl font-bold mb-1 text-white">{songTitle}</h2>
                 <p className="text-purple-200 text-sm">Song #{songNumber}</p>
               </div>
             </div>
           </div>
 
-          {/* Your Mission - moved under header */}
-          <div className="bg-blue-900/80 rounded-xl p-3 text-sm mb-4 border border-blue-400/40">
-            <p className="font-bold mb-1 text-white">🎯 Your Mission:</p>
-            <p className="text-white">Pop the bubbles with your carrot arrows to get your vocab bank back!</p>
+          {/* Your Mission */}
+          <div className="bg-blue-50 rounded-xl p-3 text-sm mb-4 border border-blue-200">
+            <p className="font-bold mb-1 text-blue-800">🎯 Your Mission:</p>
+            <p className="text-blue-700">Pop the bubbles with your carrot arrows to get your vocab bank back!</p>
           </div>
 
           {/* Settings */}
-          <div className="bg-black bg-opacity-40 rounded-xl p-6 space-y-6 mb-6">
+          <div className="bg-white rounded-xl p-6 space-y-6 mb-6 shadow-sm border border-gray-200">
             {/* Speed Selection */}
             <div>
-              <label className="block mb-3 font-semibold">Song Speed</label>
+              <label className="block mb-3 font-semibold text-gray-900">Song Speed</label>
               <div className="flex gap-3">
                 {(["slow", "medium", "fast"] as const).map((s) => (
                   <button
@@ -860,7 +859,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
                         ? s === "slow" ? "bg-green-600 text-white shadow-lg shadow-green-600/30"
                         : s === "medium" ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
                         : "bg-red-600 text-white shadow-lg shadow-red-600/30"
-                        : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
                   >
                     {s === "slow" ? "🐢 Slow" : s === "medium" ? "🎵 Medium" : "⚡ Fast"}
@@ -871,22 +870,22 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
 
             {/* Translations toggle */}
             <div>
-              <label className="block mb-2 font-semibold">English Translations</label>
+              <label className="block mb-2 font-semibold text-gray-900">English Translations</label>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setShowTranslations(!showTranslations)}
-                  className={`w-14 h-7 rounded-full relative transition-colors ${showTranslations ? "bg-green-600" : "bg-gray-600"}`}
+                  className={`w-14 h-7 rounded-full relative transition-colors ${showTranslations ? "bg-green-600" : "bg-gray-300"}`}
                 >
                   <div
-                    className={`absolute top-[2px] w-6 h-6 bg-white rounded-full transition-transform ${showTranslations ? "translate-x-7" : "translate-x-[2px]"}`}
+                    className={`absolute top-[2px] w-6 h-6 bg-white rounded-full transition-transform shadow-sm ${showTranslations ? "translate-x-7" : "translate-x-[2px]"}`}
                   />
                 </button>
-                <span className="text-purple-200">{showTranslations ? "ON" : "OFF"} - See word meanings</span>
+                <span className="text-gray-600">{showTranslations ? "ON" : "OFF"} - See word meanings</span>
               </div>
             </div>
 
             {/* Total bubbles info */}
-            <div className="text-center text-sm text-purple-300">
+            <div className="text-center text-sm text-gray-500">
               {totalNotes} vocab words
             </div>
           </div>
@@ -894,7 +893,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
           {/* Start button */}
           <button
             onClick={startGame}
-            className="w-full bg-green-600 hover:bg-green-700 py-4 rounded-xl font-bold text-2xl transition-colors"
+            className="w-full bg-green-600 hover:bg-green-700 py-4 rounded-xl font-bold text-2xl text-white transition-colors"
           >
             {showTranslations ? "▶ Start!" : "▶ ¡Empezar!"}
           </button>
@@ -907,7 +906,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
   if (gameState === "ended") {
     const { grade, color: gradeColor } = getGrade()
     return (
-      <div className="h-[100dvh] text-white flex items-center justify-center relative overflow-hidden" style={{ background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(/images/backgrounds/song-${songNumber}.jpg) center/cover no-repeat fixed`, backgroundColor: "#1a0a2e" }}>
+      <div className="h-[100dvh] text-gray-900 flex items-center justify-center relative overflow-hidden bg-gradient-to-b from-yellow-50 to-white">
         {/* Falling coin bubbles background animation */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {Array.from({ length: 25 }).map((_, i) => {
@@ -993,19 +992,19 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
           {/* Stats row - horizontal with large emojis */}
           <div className="flex gap-3 w-full mb-3">
             {/* Longest Flow */}
-            <div className="flex-1 bg-orange-900/40 rounded-xl px-3 py-2 border-2 border-orange-500">
+            <div className="flex-1 bg-orange-50 rounded-xl px-3 py-2 border-2 border-orange-300">
               <div className="flex items-center justify-center gap-2">
                 <span className="text-2xl md:text-3xl">🔥</span>
-                <span className="text-orange-200 text-base md:text-lg font-semibold">Flow</span>
-                <span className="font-bold text-orange-300 text-2xl md:text-3xl">{maxCombo}</span>
+                <span className="text-orange-700 text-base md:text-lg font-semibold">Flow</span>
+                <span className="font-bold text-orange-600 text-2xl md:text-3xl">{maxCombo}</span>
               </div>
             </div>
             {/* Vocab Bank */}
-            <div className="flex-1 bg-yellow-900/40 rounded-xl px-3 py-2 border-2 border-yellow-500">
+            <div className="flex-1 bg-yellow-50 rounded-xl px-3 py-2 border-2 border-yellow-300">
               <div className="flex items-center justify-center gap-2">
                 <span className="text-2xl md:text-3xl">💰</span>
-                <span className="text-yellow-200 text-base md:text-lg font-semibold">Bank</span>
-                <span className="font-bold text-yellow-300 text-2xl md:text-3xl">{score}</span>
+                <span className="text-yellow-700 text-base md:text-lg font-semibold">Bank</span>
+                <span className="font-bold text-yellow-600 text-2xl md:text-3xl">{score}</span>
               </div>
             </div>
           </div>
@@ -1013,16 +1012,16 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
           <div className="space-y-2 w-full mb-2">
             <button
               onClick={resetGame}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 rounded-xl font-bold text-lg hover:from-purple-500 hover:to-pink-500 transition-all"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 rounded-xl font-bold text-lg text-white hover:from-purple-500 hover:to-pink-500 transition-all"
             >
               {showTranslations ? "↻ Play Again!" : "↻ ¡Jugar Otra Vez!"}
             </button>
             <div className="flex gap-2 w-full">
-              <button onClick={onBack} className="flex-1 bg-gray-700 hover:bg-gray-600 px-4 py-2.5 rounded-xl font-bold transition-colors text-sm">
+              <button onClick={onBack} className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2.5 rounded-xl font-bold transition-colors text-sm">
                 ← Back to Songs
               </button>
               {onNextSong && (
-                <button onClick={onNextSong} className="flex-1 bg-green-700 hover:bg-green-600 px-4 py-2.5 rounded-xl font-bold transition-colors text-sm">
+                <button onClick={onNextSong} className="flex-1 bg-green-600 hover:bg-green-500 text-white px-4 py-2.5 rounded-xl font-bold transition-colors text-sm">
                   Next Song →
                 </button>
               )}
@@ -1036,10 +1035,10 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
               <img
                 src="/images/super-bunny-animated.webp"
                 alt="Super Bunny"
-                className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]"
+                className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.1)]"
               />
             </div>
-            <p className="text-purple-200 text-xs italic">
+            <p className="text-purple-600 text-xs italic">
               {showTranslations ? "Super Bunny celebrates your victory!" : "¡Súper Conejito celebra tu victoria!"}
             </p>
           </div>
