@@ -1036,7 +1036,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
                 src="/images/super-bunny-animated.webp"
                 alt="Blue Bunny"
                 className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.1)]"
-                style={{ filter: "brightness(0) saturate(100%) invert(35%) sepia(90%) saturate(800%) hue-rotate(195deg) brightness(95%)" }}
+                style={{ filter: "sepia(1) saturate(3) hue-rotate(190deg)" }}
               />
             </div>
             <p className="text-blue-600 text-xs italic">

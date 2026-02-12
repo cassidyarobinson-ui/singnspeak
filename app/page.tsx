@@ -1883,7 +1883,7 @@ export default function HablaBeat() {
                   src="/images/super-bunny.gif"
                   alt="Blue Bunny"
                   className="w-full h-full object-contain"
-                  style={{ filter: "brightness(0) saturate(100%) invert(35%) sepia(90%) saturate(800%) hue-rotate(195deg) brightness(95%)" }}
+                  style={{ filter: "sepia(1) saturate(3) hue-rotate(190deg)" }}
                 />
                 {/* Heart overlay replacing S on chest */}
                 <svg className="absolute" style={{ top: "52%", left: "38%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -1982,7 +1982,7 @@ export default function HablaBeat() {
                   src="/images/super-bunny.gif"
                   alt="Blue Bunny"
                   className="w-full h-full object-contain"
-                  style={{ filter: "brightness(0) saturate(100%) invert(35%) sepia(90%) saturate(800%) hue-rotate(195deg) brightness(95%)" }}
+                  style={{ filter: "sepia(1) saturate(3) hue-rotate(190deg)" }}
                 />
                 {/* Heart overlay replacing S on chest */}
                 <svg className="absolute" style={{ top: "52%", left: "38%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
