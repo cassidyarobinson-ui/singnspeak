@@ -1467,9 +1467,17 @@ export default function HablaBeat() {
     setSingLevel(0)
   }
 
-  // Clean up mic when leaving player view
+  // Auto-start mic when entering player view, clean up when leaving
   useEffect(() => {
-    if (currentView !== "player") {
+    if (currentView === "player") {
+      // Small delay to ensure the view is rendered before requesting mic
+      const timer = setTimeout(() => {
+        if (!isMicActive) {
+          startMic()
+        }
+      }, 500)
+      return () => clearTimeout(timer)
+    } else {
       stopMic()
     }
   }, [currentView])
@@ -1748,59 +1756,57 @@ export default function HablaBeat() {
             )}
           </div>
 
-          {/* Sing Along Section */}
+          {/* Sing Along Section - always active */}
           <div className="px-4 mb-4">
             <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-bold text-purple-700">🎤 Sing Along</h3>
-                {isMicActive && (
-                  <span className="text-yellow-600 font-bold text-lg">⭐ {singScore}</span>
-                )}
+                <h3 className="text-sm font-bold text-blue-700">🎤 Sing Along</h3>
+                <span className="text-yellow-600 font-bold text-lg">⭐ {singScore}</span>
               </div>
 
-              {!isMicActive ? (
-                <button
-                  onClick={startMic}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 hover:bg-purple-500 rounded-xl font-bold text-base text-white transition-all"
-                >
-                  <Mic className="h-5 w-5" />
-                  Start Singing!
-                </button>
-              ) : (
-                <div className="space-y-3">
-                  {/* Live volume meter */}
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all duration-75"
-                        style={{
-                          width: `${singLevel}%`,
-                          background: singLevel > 60
-                            ? "linear-gradient(90deg, #22c55e, #eab308, #ef4444)"
-                            : singLevel > 25
-                            ? "linear-gradient(90deg, #22c55e, #eab308)"
-                            : singLevel > 10
-                            ? "#22c55e"
-                            : "#d1d5db",
-                        }}
-                      />
-                    </div>
-                    <span className="text-xs text-gray-500 w-8 text-right">{singLevel}%</span>
+              <div className="space-y-3">
+                {/* Live volume meter */}
+                <div className="flex items-center gap-3">
+                  <div className="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-75"
+                      style={{
+                        width: `${singLevel}%`,
+                        background: singLevel > 60
+                          ? "linear-gradient(90deg, #22c55e, #eab308, #ef4444)"
+                          : singLevel > 25
+                          ? "linear-gradient(90deg, #22c55e, #eab308)"
+                          : singLevel > 10
+                          ? "#22c55e"
+                          : "#d1d5db",
+                      }}
+                    />
                   </div>
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs text-gray-500">
-                      {singLevel > 40 ? "🔥 Great singing!" : singLevel > 15 ? "🎵 Keep going!" : "🎤 Sing louder!"}
-                    </p>
+                  <span className="text-xs text-gray-500 w-8 text-right">{singLevel}%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <p className="text-xs text-gray-500">
+                    {singLevel > 40 ? "🔥 Great singing!" : singLevel > 15 ? "🎵 Keep going!" : "🎤 Sing along!"}
+                  </p>
+                  {isMicActive ? (
                     <button
                       onClick={stopMic}
                       className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500 hover:bg-red-400 rounded-lg text-xs font-bold text-white transition-all"
                     >
                       <MicOff className="h-3.5 w-3.5" />
-                      Stop
+                      Mute
                     </button>
-                  </div>
+                  ) : (
+                    <button
+                      onClick={startMic}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500 hover:bg-blue-400 rounded-lg text-xs font-bold text-white transition-all"
+                    >
+                      <Mic className="h-3.5 w-3.5" />
+                      Unmute
+                    </button>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
@@ -1819,7 +1825,7 @@ export default function HablaBeat() {
               {selectedLanguage === "spanish" && (
                 <button
                   onClick={() => { stopMic(); setCurrentView("ddr") }}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-pink-600 hover:bg-pink-500 rounded-full font-bold text-sm text-white transition-colors"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-full font-bold text-sm text-white transition-colors"
                 >
                   🥕 Play Mode
                 </button>
@@ -1883,19 +1889,20 @@ export default function HablaBeat() {
                   src="/images/super-bunny.gif"
                   alt="Blue Bunny"
                   className="w-full h-full object-contain"
-                  style={{ filter: "sepia(1) saturate(3) hue-rotate(190deg)" }}
                 />
-                {/* Heart overlay replacing S on chest */}
-                <svg className="absolute" style={{ top: "52%", left: "38%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                </svg>
+                {/* Heart overlay replacing S on chest - opaque white bg to cover S */}
+                <div className="absolute flex items-center justify-center" style={{ top: "49%", left: "35%", width: "22%", height: "22%", background: "white", borderRadius: "50%" }}>
+                  <svg style={{ width: "75%", height: "75%" }} viewBox="0 0 24 24" fill="#2563eb" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                </div>
               </div>
               <div className="flex-1 text-left">
                 <h1 className="text-3xl font-bold mb-1 mt-3 text-gray-900">HablaBeat</h1>
                 <p className="text-blue-600 text-lg">Your Vocab Bank 💰</p>
                 <div className="flex items-center gap-2 mt-2">
-                  <Coins className="h-4 w-4 text-blue-600" />
-                  <span className="text-blue-600 font-medium">
+                  <Coins className="h-4 w-4 text-teal-600" />
+                  <span className="text-teal-600 font-medium">
                     {earnedCoins.length} coins collected
                   </span>
                 </div>
@@ -1982,12 +1989,13 @@ export default function HablaBeat() {
                   src="/images/super-bunny.gif"
                   alt="Blue Bunny"
                   className="w-full h-full object-contain"
-                  style={{ filter: "sepia(1) saturate(3) hue-rotate(190deg)" }}
                 />
-                {/* Heart overlay replacing S on chest */}
-                <svg className="absolute" style={{ top: "52%", left: "38%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                </svg>
+                {/* Heart overlay replacing S on chest - opaque white bg to cover S */}
+                <div className="absolute flex items-center justify-center" style={{ top: "49%", left: "35%", width: "22%", height: "22%", background: "white", borderRadius: "50%" }}>
+                  <svg style={{ width: "75%", height: "75%" }} viewBox="0 0 24 24" fill="#2563eb" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                </div>
               </div>
               <div className="flex-1 text-left">
                 <h1 className="text-3xl font-bold mb-1 mt-3 text-gray-900">HablaBeat</h1>
@@ -1995,7 +2003,7 @@ export default function HablaBeat() {
                 <p className="text-blue-600 text-lg leading-tight font-bold">Blue Bunny!</p>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-xl">🔥</span>
-                  <span className="text-orange-600 font-bold">Best Flow: {bestFlow}</span>
+                  <span className="text-teal-600 font-bold">Best Flow: {bestFlow}</span>
                 </div>
               </div>
             </div>
@@ -2103,7 +2111,7 @@ export default function HablaBeat() {
                                     {selectedLanguage === "spanish" && (
                                       <button
                                         onClick={() => handlePlayDDR(song.id, category.id, section.id)}
-                                        className="flex items-center gap-1.5 px-4 py-2 bg-pink-600 hover:bg-pink-500 rounded-lg text-sm font-bold text-white transition-colors"
+                                        className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-bold text-white transition-colors"
                                       >
                                         🥕 Play
                                       </button>
@@ -2111,7 +2119,7 @@ export default function HablaBeat() {
                                     {isClickable && (
                                       <button
                                         onClick={() => handlePlaySong(song.id, category.id, section.id)}
-                                        className="flex items-center gap-1.5 px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg text-sm font-bold text-white transition-colors"
+                                        className="flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-sm font-bold text-white transition-colors"
                                       >
                                         🎤 Sing
                                       </button>
