@@ -33,6 +33,7 @@ interface Note {
   duration: number
   lane: number
   hit: boolean
+  missed: boolean
   id: string
 }
 
@@ -160,6 +161,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
           duration: word.duration,
           lane: (lineIndex + wordIndex) % 4,
           hit: false,
+          missed: false,
           id: `${lineIndex}-${wordIndex}`,
         })
       })
@@ -245,9 +247,12 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
       const container = fallingRef.current
       if (!container) return
 
-      // Calculate effective total time: last bubble + 4s fade (reflected in display)
+      // How long a missed bubble takes to exit off the bottom of the screen
+      const MISS_EXIT_TIME = 1.5
+
+      // Calculate effective total time: last bubble exit + 3s fade
       const lastNote = notesRef.current[notesRef.current.length - 1]
-      const effectiveEnd = lastNote ? lastNote.timestamp + 4 : (audio.duration || 0)
+      const effectiveEnd = lastNote ? lastNote.timestamp + HIT_WINDOWS.MISS + MISS_EXIT_TIME + 3 : (audio.duration || 0)
       const displayTotal = Math.min(effectiveEnd, audio.duration || effectiveEnd)
 
       // Update time display
@@ -263,17 +268,25 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
       notesRef.current.forEach((note) => {
         if (!note.hit) {
           const timeUntilHit = note.timestamp - currentTime
-          const isVisible = timeUntilHit <= NOTE_TRAVEL_TIME && timeUntilHit >= -HIT_WINDOWS.MISS
+          // Show bubble from travel time before hit, until it exits off-screen after miss
+          const isVisible = timeUntilHit <= NOTE_TRAVEL_TIME && timeUntilHit >= -(HIT_WINDOWS.MISS + MISS_EXIT_TIME)
 
           if (isVisible) {
             const progress = 1 - timeUntilHit / NOTE_TRAVEL_TIME
+            // For missed bubbles, continue past the hit line
             const yPosition = progress * (HIT_LINE_POSITION * 100)
 
-            if (yPosition >= 0 && yPosition <= 100) {
+            if (yPosition >= 0 && yPosition <= 115) {
               // 3D perspective: bubbles start small/angled at top, grow as they approach
-              const scale = 0.45 + progress * 0.55 // 0.45 at top → 1.0 at hit line
-              const rotateX = (1 - progress) * 35 // 35deg tilt at top → 0 at hit line
-              const opacity = Math.min(1, 0.4 + progress * 0.6) // fade in slightly
+              const scale = note.missed
+                ? 1.0  // Stay full size when missed
+                : 0.45 + progress * 0.55 // 0.45 at top → 1.0 at hit line
+              const rotateX = note.missed
+                ? 0  // No tilt when missed
+                : (1 - progress) * 35 // 35deg tilt at top → 0 at hit line
+              const opacity = note.missed
+                ? Math.max(0, 1 - (yPosition - HIT_LINE_POSITION * 100) / 20) // Fade out as it exits
+                : Math.min(1, 0.4 + progress * 0.6) // fade in slightly
 
               const noteEl = document.createElement("div")
               // Round blue bubble with coin inside
@@ -319,19 +332,26 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
             }
           }
 
-          // Auto-miss
-          if (currentTime > note.timestamp + HIT_WINDOWS.MISS) {
-            note.hit = true
+          // Auto-miss: mark as missed when past the hit window, but keep rendering
+          if (!note.missed && currentTime > note.timestamp + HIT_WINDOWS.MISS) {
+            note.missed = true
             comboRef.current = 0
             setCombo(0)
+          }
+
+          // Remove from rendering once fully off screen
+          if (currentTime > note.timestamp + HIT_WINDOWS.MISS + MISS_EXIT_TIME) {
+            note.hit = true
           }
         }
       })
 
-      // Check if all notes are done — fade out 3-5 seconds after last bubble
+      // Check if all notes are done — fade out 3 seconds after last bubble exits screen
       const allNotesDone = notesRef.current.every((n) => n.hit)
       const lastNoteCheck = notesRef.current[notesRef.current.length - 1]
-      if (allNotesDone && lastNoteCheck && currentTime > lastNoteCheck.timestamp + 1) {
+      // Last bubble exits screen at: timestamp + MISS window + exit travel time
+      const lastBubbleExitTime = lastNoteCheck ? lastNoteCheck.timestamp + HIT_WINDOWS.MISS + MISS_EXIT_TIME : 0
+      if (allNotesDone && lastNoteCheck && currentTime > lastBubbleExitTime) {
         // Fade out audio over ~3 seconds then end
         const fadeAudio = audioRef.current
         if (fadeAudio && !fadeAudio.paused) {
@@ -413,7 +433,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
 
       // Find closest unhit note in this lane
       const candidates = notesRef.current.filter(
-        (n) => n.lane === lane && !n.hit && Math.abs(n.timestamp - currentTime) <= HIT_WINDOWS.MISS
+        (n) => n.lane === lane && !n.hit && !n.missed && Math.abs(n.timestamp - currentTime) <= HIT_WINDOWS.MISS
       )
 
       if (candidates.length === 0) return
@@ -483,7 +503,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
         const currentTime = audio.currentTime
 
         const candidates = notesRef.current.filter(
-          (n) => n.lane === lane && !n.hit && Math.abs(n.timestamp - currentTime) <= HIT_WINDOWS.MISS
+          (n) => n.lane === lane && !n.hit && !n.missed && Math.abs(n.timestamp - currentTime) <= HIT_WINDOWS.MISS
         )
 
         if (candidates.length === 0) continue

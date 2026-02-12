@@ -18,6 +18,8 @@ import {
   MoreHorizontal,
   Coins,
   Flame,
+  Mic,
+  MicOff,
 } from "lucide-react"
 import Image from "next/image"
 
@@ -1385,6 +1387,15 @@ export default function HablaBeat() {
   const [bestGrades, setBestGrades] = useState<Record<number, string>>({})
   const [songPlayCounts, setSongPlayCounts] = useState<Record<number, number>>({})
 
+  // Singing detection state
+  const [isMicActive, setIsMicActive] = useState(false)
+  const [singScore, setSingScore] = useState(0)
+  const [singLevel, setSingLevel] = useState(0) // 0-100 volume level for visual meter
+  const micStreamRef = useRef<MediaStream | null>(null)
+  const micAnalyserRef = useRef<AnalyserNode | null>(null)
+  const micAnimFrameRef = useRef<number | null>(null)
+  const singScoreRef = useRef(0)
+
   // Load persisted stats on mount
   useEffect(() => {
     setBestFlow(loadPersisted("hablabeat-best-flow", 0))
@@ -1398,6 +1409,68 @@ export default function HablaBeat() {
   useEffect(() => { if (totalVocabBank > 0) localStorage.setItem("hablabeat-total-vocab-bank", JSON.stringify(totalVocabBank)) }, [totalVocabBank])
   useEffect(() => { if (Object.keys(bestGrades).length > 0) localStorage.setItem("hablabeat-best-grades", JSON.stringify(bestGrades)) }, [bestGrades])
   useEffect(() => { if (Object.keys(songPlayCounts).length > 0) localStorage.setItem("hablabeat-song-play-counts", JSON.stringify(songPlayCounts)) }, [songPlayCounts])
+
+  // Singing detection: start/stop mic
+  const startMic = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      micStreamRef.current = stream
+      const audioContext = new AudioContext()
+      const source = audioContext.createMediaStreamSource(stream)
+      const analyser = audioContext.createAnalyser()
+      analyser.fftSize = 256
+      analyser.smoothingTimeConstant = 0.8
+      source.connect(analyser)
+      micAnalyserRef.current = analyser
+
+      singScoreRef.current = 0
+      setSingScore(0)
+      setIsMicActive(true)
+
+      // Monitor mic volume
+      const dataArray = new Uint8Array(analyser.frequencyBinCount)
+      const checkVolume = () => {
+        if (!micAnalyserRef.current) return
+        micAnalyserRef.current.getByteFrequencyData(dataArray)
+        // Calculate average volume
+        const avg = dataArray.reduce((sum, val) => sum + val, 0) / dataArray.length
+        const level = Math.min(100, Math.round(avg * 1.5))
+        setSingLevel(level)
+
+        // Award points when singing is detected (above threshold)
+        if (level > 15) {
+          singScoreRef.current += Math.round(level / 20)
+          setSingScore(singScoreRef.current)
+        }
+
+        micAnimFrameRef.current = requestAnimationFrame(checkVolume)
+      }
+      checkVolume()
+    } catch {
+      console.error("Microphone access denied")
+    }
+  }
+
+  const stopMic = () => {
+    if (micStreamRef.current) {
+      micStreamRef.current.getTracks().forEach((t) => t.stop())
+      micStreamRef.current = null
+    }
+    if (micAnimFrameRef.current) {
+      cancelAnimationFrame(micAnimFrameRef.current)
+      micAnimFrameRef.current = null
+    }
+    micAnalyserRef.current = null
+    setIsMicActive(false)
+    setSingLevel(0)
+  }
+
+  // Clean up mic when leaving player view
+  useEffect(() => {
+    if (currentView !== "player") {
+      stopMic()
+    }
+  }, [currentView])
 
   // Check if section badge is unlocked
   const isSectionBadgeUnlocked = (section: any) => {
@@ -1695,16 +1768,25 @@ export default function HablaBeat() {
     return (
       <div className="aspect-square rounded-lg overflow-hidden bg-black relative youtube-hide-branding">
         <div ref={playerRef} className="w-full h-full"></div>
-        {/* Overlay to hide YouTube logo in bottom right */}
-        <div className="absolute bottom-0 right-0 w-20 h-8 bg-black z-10 pointer-events-none" />
+        {/* Overlays to hide YouTube branding */}
+        <div className="absolute bottom-0 right-0 w-24 h-10 bg-black z-10 pointer-events-none" />
+        <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-black/80 to-transparent z-10 pointer-events-none" />
         <style jsx global>{`
           .youtube-hide-branding iframe {
             pointer-events: auto;
           }
           .ytp-watermark,
           .ytp-youtube-button,
-          .ytp-show-cards-title {
+          .ytp-show-cards-title,
+          .ytp-title,
+          .ytp-title-text,
+          .ytp-share-button,
+          .ytp-watch-later-button,
+          .ytp-chrome-top,
+          .ytp-impression-link,
+          a.ytp-title-link {
             display: none !important;
+            opacity: 0 !important;
           }
         `}</style>
       </div>
@@ -1750,8 +1832,40 @@ export default function HablaBeat() {
           </div>
 
           {/* Video/Lyrics Area */}
-          <div className="px-6 mb-8">
+          <div className="px-6 mb-4">
             <YouTubePlayer videoId={currentSong.youtubeId} />
+          </div>
+
+          {/* Sing Along - Mic toggle and scoring */}
+          <div className="px-6 mb-4">
+            <div className="flex items-center gap-3 bg-gray-800/60 rounded-xl p-3">
+              <button
+                onClick={isMicActive ? stopMic : startMic}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-sm transition-all ${
+                  isMicActive
+                    ? "bg-red-600 hover:bg-red-500 text-white animate-pulse"
+                    : "bg-purple-600 hover:bg-purple-500 text-white"
+                }`}
+              >
+                {isMicActive ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                {isMicActive ? "Stop" : "🎤 Sing Along!"}
+              </button>
+              {isMicActive && (
+                <div className="flex-1 flex items-center gap-2">
+                  {/* Volume meter */}
+                  <div className="flex-1 h-3 bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-100"
+                      style={{
+                        width: `${singLevel}%`,
+                        background: singLevel > 50 ? "linear-gradient(90deg, #22c55e, #eab308)" : singLevel > 15 ? "#22c55e" : "#6b7280",
+                      }}
+                    />
+                  </div>
+                  <span className="text-yellow-300 font-bold text-sm min-w-[3rem] text-right">⭐ {singScore}</span>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Song Info with Skip Buttons */}
