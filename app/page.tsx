@@ -1886,13 +1886,12 @@ export default function HablaBeat() {
               <div className="w-44 h-44 flex-shrink-0 relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/super-bunny.gif"
+                  src="/images/super-bunny-blue.png"
                   alt="Blue Bunny"
                   className="w-full h-full object-contain"
-                  style={{ filter: "sepia(1) saturate(2.5) hue-rotate(190deg) brightness(1.1)", opacity: 0.8 }}
                 />
                 {/* Heart outline overlay on chest replacing S */}
-                <svg className="absolute pointer-events-none" style={{ top: "53%", left: "34%", width: "22%", height: "22%" }} viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="absolute pointer-events-none" style={{ top: "53%", left: "36%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
               </div>
@@ -1985,13 +1984,12 @@ export default function HablaBeat() {
               <div className="w-44 h-44 flex-shrink-0 relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/super-bunny.gif"
+                  src="/images/super-bunny-blue.png"
                   alt="Blue Bunny"
                   className="w-full h-full object-contain"
-                  style={{ filter: "sepia(1) saturate(2.5) hue-rotate(190deg) brightness(1.1)", opacity: 0.8 }}
                 />
                 {/* Heart outline overlay on chest replacing S */}
-                <svg className="absolute pointer-events-none" style={{ top: "53%", left: "34%", width: "22%", height: "22%" }} viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg className="absolute pointer-events-none" style={{ top: "53%", left: "36%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                 </svg>
               </div>

@@ -312,11 +312,8 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
                 opacity: ${opacity};
               `
 
-              // Coin inside the bubble — A colors, C double ring, 82% size, more bubble-like
-              const englishText = (showTranslations && note.english && note.english.toLowerCase() !== note.text.toLowerCase()) ? note.english : ""
-              const coinContent = englishText
-                ? `<div style="font-size:10px;font-weight:700;color:#78350F;line-height:1.1;letter-spacing:0.3px;max-width:90%;text-align:center">${englishText}</div><div style="font-size:14px;font-weight:900;color:#451A03;line-height:1.1;max-width:90%;text-align:center">${note.text}</div>`
-                : `<div style="font-size:18px;font-weight:900;color:#451A03;line-height:1.1;max-width:90%;text-align:center">${note.text}</div>`
+              // Coin inside the bubble — only Spanish word (English shown on hit)
+              const coinContent = `<div style="font-size:16px;font-weight:900;color:#451A03;line-height:1.1;max-width:90%;text-align:center">${note.text}</div>`
 
               noteEl.innerHTML = `
                 <div style="position:absolute;top:5%;left:12%;width:30%;height:18%;background:radial-gradient(ellipse,rgba(255,255,255,0.5),rgba(255,255,255,0) 70%);border-radius:50%;transform:rotate(-20deg);pointer-events:none;z-index:2"></div>
@@ -448,18 +445,21 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
       let judgmentColor: string
 
       if (timeDelta <= HIT_WINDOWS.PERFECT) {
-        judgment = "¡PERFECTO!"
         points = 25
         judgmentColor = "text-yellow-300"
       } else if (timeDelta <= HIT_WINDOWS.GOOD) {
-        judgment = "¡BIEN!"
         points = 25
         judgmentColor = "text-green-300"
       } else {
-        judgment = "¡OK!"
         points = 25
         judgmentColor = "text-blue-300"
       }
+
+      // Show English translation as the judgment text
+      const englishWord = closest.english && closest.english.toLowerCase() !== closest.text.toLowerCase()
+        ? closest.english
+        : closest.text
+      judgment = englishWord
 
       closest.hit = true
       scoreRef.current += points
@@ -518,18 +518,21 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
         let judgmentColor: string
 
         if (timeDelta <= HIT_WINDOWS.PERFECT) {
-          judgment = "¡PERFECTO!"
           points = 25
           judgmentColor = "text-yellow-300"
         } else if (timeDelta <= HIT_WINDOWS.GOOD) {
-          judgment = "¡BIEN!"
           points = 25
           judgmentColor = "text-green-300"
         } else {
-          judgment = "¡OK!"
           points = 25
           judgmentColor = "text-blue-300"
         }
+
+        // Show English translation as the judgment text
+        const englishWord = closest.english && closest.english.toLowerCase() !== closest.text.toLowerCase()
+          ? closest.english
+          : closest.text
+        judgment = englishWord
 
         closest.hit = true
         scoreRef.current += points
@@ -697,9 +700,7 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
       display: flex; justify-content: center; z-index: 95;
       animation: coinDrop 0.8s ease-in forwards;
     `
-    const coinText = showTranslations && noteEnglish && noteEnglish.toLowerCase() !== noteText.toLowerCase()
-      ? `<div style="font-size:10px;font-weight:700;color:#5C3000;line-height:1.1;max-width:90%;text-align:center;text-shadow:0 0.5px 0 rgba(255,255,255,0.3)">${noteEnglish}</div><div style="font-size:13px;font-weight:900;color:#3D1D00;line-height:1.1;max-width:90%;text-align:center;text-shadow:0 0.5px 0 rgba(255,255,255,0.3)">${noteText}</div>`
-      : `<div style="font-size:14px;font-weight:900;color:#3D1D00;line-height:1.1;max-width:90%;text-align:center;text-shadow:0 0.5px 0 rgba(255,255,255,0.3)">${noteText}</div>`
+    const coinText = `<div style="font-size:14px;font-weight:900;color:#3D1D00;line-height:1.1;max-width:90%;text-align:center;text-shadow:0 0.5px 0 rgba(255,255,255,0.3)">${noteText}</div>`
     coin.innerHTML = `
       <div style="width:56px;height:56px;border-radius:50%;background:conic-gradient(from 160deg,#D97706,#FBBF24 30%,#FDE68A 50%,#FBBF24 70%,#D97706);border:3px solid #92400E;box-shadow:0 3px 10px rgba(0,0,0,0.5),inset 0 -3px 6px rgba(120,53,0,0.4),inset 2px 2px 6px rgba(254,243,199,0.5),0 0 12px rgba(251,191,36,0.3);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;padding:2px;position:relative">
         <div style="position:absolute;inset:3px;border-radius:50%;border:2px solid rgba(254,243,199,0.4);pointer-events:none"></div>
@@ -1033,13 +1034,12 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
             <div className="relative w-24 h-24 md:w-32 md:h-32">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/images/super-bunny-animated.webp"
+                src="/images/super-bunny-blue.png"
                 alt="Blue Bunny"
                 className="w-full h-full object-contain drop-shadow-[0_0_20px_rgba(0,0,0,0.1)]"
-                style={{ filter: "sepia(1) saturate(2.5) hue-rotate(190deg) brightness(1.1)", opacity: 0.8 }}
               />
               {/* Heart outline overlay on chest */}
-              <svg className="absolute pointer-events-none" style={{ top: "53%", left: "34%", width: "22%", height: "22%" }} viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="absolute pointer-events-none" style={{ top: "53%", left: "36%", width: "18%", height: "18%" }} viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>
             </div>
