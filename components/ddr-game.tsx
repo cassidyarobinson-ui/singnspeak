@@ -712,17 +712,17 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
     container.appendChild(coin)
     setTimeout(() => coin.remove(), 800)
 
-    // Judgment text
+    // English word judgment text - stays visible longer
     const el = document.createElement("div")
     el.className = `absolute ${color} font-bold text-base pointer-events-none`
     el.style.cssText = `
       left: ${lane * 25 + 1}%; width: 23%; bottom: 22%; text-align: center;
       text-shadow: 3px 3px 6px rgba(0,0,0,0.9), 0 0 15px currentColor;
-      animation: ddrJudgmentPop 0.8s ease-out forwards; z-index: 100;
+      animation: ddrJudgmentPop 1.8s ease-out forwards; z-index: 100;
     `
     el.textContent = judgment
     container.appendChild(el)
-    setTimeout(() => el.remove(), 800)
+    setTimeout(() => el.remove(), 1800)
   }
 
   const checkEncouragement = (currentCombo: number) => {
@@ -866,22 +866,6 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
                     {s === "slow" ? "🐢 Slow" : s === "medium" ? "🎵 Medium" : "⚡ Fast"}
                   </button>
                 ))}
-              </div>
-            </div>
-
-            {/* Translations toggle */}
-            <div>
-              <label className="block mb-2 font-semibold text-gray-900">English Translations</label>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setShowTranslations(!showTranslations)}
-                  className={`w-14 h-7 rounded-full relative transition-colors ${showTranslations ? "bg-green-600" : "bg-gray-300"}`}
-                >
-                  <div
-                    className={`absolute top-[2px] w-6 h-6 bg-white rounded-full transition-transform shadow-sm ${showTranslations ? "translate-x-7" : "translate-x-[2px]"}`}
-                  />
-                </button>
-                <span className="text-gray-600">{showTranslations ? "ON" : "OFF"} - See word meanings</span>
               </div>
             </div>
 
@@ -1171,7 +1155,9 @@ export default function DDRGame({ songNumber, songTitle, onBack, onNextSong, onG
       <style jsx global>{`
         @keyframes ddrJudgmentPop {
           0% { transform: scale(0.3); opacity: 0; }
-          40% { transform: scale(1.4); opacity: 1; }
+          15% { transform: scale(1.4); opacity: 1; }
+          25% { transform: scale(1); opacity: 1; }
+          70% { transform: translateY(-15px) scale(1); opacity: 1; }
           100% { transform: translateY(-40px) scale(0.8); opacity: 0; }
         }
         @keyframes ddrEncouragementBounce {
